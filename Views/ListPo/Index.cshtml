@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+    var role = ViewBag.role_id;
+}
+<div class="row">
+    <div class="col-lg-12">
+        <form class="form">                          
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <h3 class="card-title">Open PO</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="kt_datatable_open_item_po">
+                            <thead>
+                                <tr>
+                                    <th>Vendor Name</th>
+                                    <th>Item</th>
+                                    <th>Doc. Date</th>
+                                    <th>No PO</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>UoM</th>
+                                    <th>Currency</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript" src="~/plugins/custom/datatables/datatables.bundle.js?v=7.2.8"></script>
+    <script src="~/js/apps/open_item_po.js?v=1.0.0"></script>
+}

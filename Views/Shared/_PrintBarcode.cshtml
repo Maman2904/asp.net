@@ -1,0 +1,65 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    Layout = null;
+    var role = ViewBag.idRole;
+    var detil = ViewBag.ticket_data;
+    var barcode = ViewBag.BaseUrl + "/document/barcode_ticket/" + detil.ticket_number + ".png";
+}
+<!DOCTYPE html>
+<html lang="en">
+	<!--begin::Head-->
+	<head>
+		<meta charset="utf-8" />
+		<title>Print Page</title>
+		<link rel="stylesheet" type="text/css" href="@ViewBag.BaseUrl/css/printpage.css" />
+        <link href="~/css/style.bundle.css?v=7.0.4" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+			.print_container { font-size: 10pt; }
+			.print_container > .header { font-size: 14pt; }
+		</style>
+	</head>
+	<body>
+		<div class="print_container a4 m-small landscape">
+			<div class="body">
+				<div class="box">
+					<table class="table table-borderless" width="100%">
+                        <tr>
+                            <td width="40%" style="border-style: dashed; border-width: 3px" class="ml-5 p-3">
+                                <h4 class="text-uppercase">@Localizer["TicketNumber"]</h4>
+                                <h4 class="text-uppercase">@detil.ticket_number</h4>
+                                <img src="@barcode" class="text-center mx-auto d-block" width="50%">
+                                <hr>
+                                <p>@detil.name</p>
+                                <p>@detil.mailing_address</p>
+                                <p>@detil.province</p>
+                                <p class="text-left">
+                                    @detil.phone_number
+                                    <span style="float: right;">@Localizer["BarcodeEnvelope"]</span>
+                                </p>
+                            </td>
+                            <td width="40%" style="border-style: dashed; border-width: 3px" class="p-3">
+                                <h4 class="text-uppercase">@Localizer["TicketNumber"]</h4>
+                                <h4 class="text-uppercase">@detil.ticket_number</h4>
+                                <img src="@barcode" class="text-center mx-auto d-block" width="50%">
+                                <hr>
+                                <p>@detil.name</p>
+                                <p>@detil.mailing_address</p>
+                                <p>@detil.province</p>
+                                <p class="text-left">
+                                    @detil.phone_number
+                                    <span style="float: right;">@Localizer["BarcodeInvoice"]</span>
+                                </p>
+                            </td>
+                        </tr>
+                </table>
+				</div>
+			</div>
+		</div>
+	</body>
+    <script>
+        window.open();
+        window.print();
+        window.close();
+    </script>
+</html>

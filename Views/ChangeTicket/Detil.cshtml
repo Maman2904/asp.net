@@ -1,0 +1,8 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+}
+<!--begin::Main Content-->
+<partial name="_DetilTicket" view-data="ViewData">
+<!--end::Main Content-->

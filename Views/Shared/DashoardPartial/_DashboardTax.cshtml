@@ -1,0 +1,31 @@
+@model Dictionary<string, string>
+
+<div class="row">
+    <div class="col-lg-4 mb-5">
+        <div class="card card-custom border border-dark">
+            <div class="card-body">
+              <i class="flaticon2-paper icon-2x"></i>
+                <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["paid_ticket"]</span>
+                <div><a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Paid Ticket</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-5">
+        <div class="card card-custom border border-dark">
+            <div class="card-body">
+              <i class="flaticon2-paper icon-2x"></i>
+                <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["require_reversal_ticket"]</span>
+                <div><a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Require Reversal</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-5">
+        <div class="card card-custom border border-dark">
+            <div class="card-body">
+              <i class="flaticon2-paper icon-2x"></i>
+                <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["reversal_complete_ticket"]</span>
+                <div><a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Reversal Completed</a></div>
+            </div>
+        </div>
+    </div>
+</div>

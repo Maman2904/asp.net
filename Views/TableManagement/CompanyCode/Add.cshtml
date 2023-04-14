@@ -1,0 +1,72 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = Localizer["Title"];
+}
+
+@* begin::Main Content *@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+            <form method="POST" class="form" asp-controller="TableManagement" asp-action="AddCompanyCode" enctype="multipart/form-data">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"]</h3>
+            </div>
+            <partial name="_FormCompanyCode" view-data="ViewData">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* begin::Main Content *@
+@section Scripts{
+    <script type="text/javascript">
+		var valid_username = '@Localizer["ValidUsername"]';
+		var valid_password = '@Localizer["ValidPassword"]';
+		let error = "@ViewBag.error"
+		if (error) {
+			console.log("err", error)
+			//alert('@Localizer["IdExist"]')
+			swal.fire({
+				text: error,
+				icon: "error",
+				buttonsStyling: false,
+				confirmButtonText: "Ok!",
+				customClass: {
+					confirmButton: "btn font-weight-bold btn-light-primary"
+				}
+			}).then(function() {
+			KTUtil.scrollTop();
+			});
+		}
+
+		let success = "@ViewBag.registration_successs"
+		if (success) {
+			console.log("suc", success)
+			alert(success)
+			swal.fire({
+				text: success,
+				icon: "success",
+				buttonsStyling: false,
+				confirmButtonText: "Ok!",
+				customClass: {
+					confirmButton: "btn font-weight-bold btn-light-primary"
+				}
+			}).then(function() {
+			KTUtil.scrollTop();
+			});
+		}
+
+		@* var first = $(location).attr('pathname');
+		first.indexOf(1);
+		first.toLowerCase();
+		first = first.split("/")[1];
+		var edit_save = document.getElementById("language");
+		if(first == "en") 
+			edit_save.src = "~/media/svg/flags/226-united-states.svg";   
+		else
+			edit_save.src = "~/media/svg/flags/004-indonesia.svg"; *@
+		</script>
+    <script src="~/js/apps/form_company_code.js?v=1.0.0"></script>
+}

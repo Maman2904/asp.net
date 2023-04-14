@@ -1,0 +1,40 @@
+@using Microsoft.Extensions.Localization;
+@model tufol.Models.RegistrationModel;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+@using Microsoft.SqlServer.Management.Sdk.Sfc
+@inject IViewLocalizer Localizer;
+@{
+    @* Layout = "_LayoutPublicOld"; *@
+    ViewData["Title"] = ViewBag.controller == "Revision" ? @Localizer["TitleRevision"] : @Localizer["Title"];
+    var culture = "/" + Thread.CurrentThread.CurrentCulture.Name + "/";
+}
+
+@* begin::Main Content *@
+<!--begin::Entry-->
+<div class="d-flex flex-column-fluid">
+	<!--begin::Container-->
+	<div class="container">
+		<!--begin::Dashboard-->
+		<!--begin::Row-->
+        <div class="row">
+            <div class="col-lg-12">
+                <form method="POST" class="form" asp-controller="Home" asp-action='@(ViewBag.controller == "Revision" ? "RevisionForm" : "RegistrationForm")' enctype="multipart/form-data">
+                    <div class="card card-custom gutter-b">
+                        <div class="card-header border-0">
+                            <h3 class="card-title text-center">@(ViewBag.controller == "Revision" ? Localizer["SubtitleRevision"] : Localizer["Subtitle"])</h3>
+                        </div>
+                    </div>
+                    <partial name="_FormVendor" view-data="ViewData">
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Entry-->
+@* begin::Main Content *@
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/apps/form_vendor.js?v=1.4.8"></script>
+}

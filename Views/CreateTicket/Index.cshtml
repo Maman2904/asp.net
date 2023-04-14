@@ -1,0 +1,129 @@
+@model tufol.Models.CreateTicketModel;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+    var data = ViewBag.ticket_data;
+	var pop_up = ViewBag.pop_up;
+}
+
+@* begin::Main Content *@
+<div class="row">
+    <div class="col-lg-12">
+        @if(!data.is_locked) {
+            <form class="form" method="POST" asp-controller="CreateTicket" asp-action="Index" enctype="multipart/form-data">
+                <partial name="_FormTicket" view-data="ViewData">
+            </form>
+        } else {
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+                    @Localizer["CannotCreateTicket"]
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+<!-- Modal-->
+<div class="modal fade" id="modalTicket" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@pop_up.title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+				@Html.Raw(System.Web.HttpUtility.HtmlDecode(@pop_up.content))
+            </div>
+            <div class="modal-footer">
+                @* <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button> *@
+                <button type="button" class="btn btn-primary font-weight-bold" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal-->
+@* begin::Main Content *@
+@* Begin:Live Chat *@
+@if(ViewBag.role_id == "2") {
+    <div class="fixed-live-chat" type="button" data-toggle="modal" data-target="#liveChat" id="chat" style="display: none;">
+        <img src="~/media/users/contact_us.png" width="80px">
+    </div>
+    <div class="card card-custom modal" id="liveChat" role="dialog" tabindex="-1" aria-hidden="true" data-backdrop="false">
+        <div class="card-header card-header-tabs-line">
+            <h1 class="card-title">Send Message</h1>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <form class="form" method="POST" asp-controller="CreateTicket" asp-action="SendEmailChat">
+                <div class="form-group">
+                    <Label>Name</label>
+                    <input type="text" class="mb-3 form-control" name="name" id="name" placeholder="* Name">
+                    <Label>Email</label>
+                    <input type="text" class="mb-3 form-control" name="email" id="email" placeholder="* Email">
+                    <Label>Phone</label>
+                    <input type="text" class="mb-3 form-control" name="phone" id="phone" placeholder="* Phone">
+                    <input asp-for="area_code" name="area_code" id="area_code2" hidden>
+                    <Label>Message</label>
+                    <textarea type="text" class="mb-3 form-control" name="message" id="message"
+                    placeholder="* Message"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@* End:Live Chat *@
+
+@section Scripts{
+    <script>
+        if('@data.is_locked' == 'False')
+            $('#modalTicket').modal('show');
+        else
+            $('#modalTicket').modal('hide');
+
+        
+		let success_ticket = "@ViewBag.send_success"
+		if (success_ticket) {
+			swal.fire({
+				text: success_ticket,
+				icon: "success",
+				buttonsStyling: false,
+				confirmButtonText: "Ok!",
+				customClass: {
+					confirmButton: "btn font-weight-bold btn-light-primary"
+				}
+			}).then(function() {
+			KTUtil.scrollTop();
+			});
+		}
+
+        let error_ticket = "@ViewBag.error"
+		if (error_ticket) {
+			swal.fire({
+				text: error_ticket,
+				icon: "error",
+				buttonsStyling: false,
+				confirmButtonText: "Ok!",
+				customClass: {
+					confirmButton: "btn font-weight-bold btn-light-primary"
+				}
+			}).then(function() {
+			KTUtil.scrollTop();
+			});
+         }
+         
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/apps/form_ticket.js?v=1.5.9"></script>
+}

@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Dashboard";
+    string role_id = ViewBag.role_id;
+    string vendor_number = ViewBag.VendorNumber;
+
+    string active_vendor = ViewBag.active_vendor.ToString();
+    string pending_vendor = ViewBag.pending_vendor.ToString();
+    string revised_vendor = ViewBag.revised_vendor.ToString();
+    string rejected_vendor_by_fc = ViewBag.rejected_vendor_by_fc.ToString();
+    string draft_ticket = ViewBag.draft_ticket.ToString();
+    string sent_ticket = ViewBag.sent_ticket.ToString();
+    string rejected_by_tax_ticket = ViewBag.rejected_by_tax_ticket.ToString();
+    string received_ticket = ViewBag.received_ticket.ToString();
+    string pending_ticket = ViewBag.pending_ticket.ToString();
+    string history_ticket = ViewBag.history_ticket.ToString();
+    string paid_ticket = ViewBag.paid_ticket.ToString();
+    string approve_payment_ticket = ViewBag.approve_payment_ticket.ToString();
+    string require_reversal_ticket = ViewBag.require_reversal_ticket.ToString();
+    string reversal_complete_ticket = ViewBag.reversal_complete_ticket.ToString();
+    string simulate_ticket = ViewBag.simulate_ticket.ToString();
+    string error_ticket = ViewBag.error_ticket.ToString();
+    string confirm_proc_ticket = ViewBag.confirm_proc_ticket.ToString();
+    string reject_ticket = ViewBag.reject_ticket.ToString();
+    
+    var dict = new Dictionary<string, string> {
+        {"active_vendor", active_vendor},
+        {"pending_vendor", pending_vendor},
+        {"revised_vendor", revised_vendor},
+        {"rejected_vendor_by_fc", rejected_vendor_by_fc},
+        {"draft_ticket", draft_ticket},
+        {"sent_ticket", sent_ticket},
+        {"rejected_by_tax_ticket", rejected_by_tax_ticket},
+        {"received_ticket", received_ticket},
+        {"pending_ticket", pending_ticket},
+        {"history_ticket", history_ticket},
+        {"paid_ticket", paid_ticket},
+        {"approve_payment_ticket", approve_payment_ticket},
+        {"require_reversal_ticket", require_reversal_ticket},
+        {"reversal_complete_ticket", reversal_complete_ticket},
+        {"simulate_ticket", simulate_ticket},
+        {"error_ticket", error_ticket},
+        {"confirm_proc_ticket", confirm_proc_ticket},
+        {"reject_ticket", reject_ticket},
+        {"vendor_number", vendor_number},
+        {"role_id", role_id}
+    };
+}
+
+@* begin::Main Content *@
+@* Top main *@
+@if (@role_id == "2") {
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardVendor.cshtml", dict)
+}else if(@role_id == "3") {
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardProcurement.cshtml", dict)
+}else if(@role_id == "5"){
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardFC.cshtml", dict)
+}else if(@role_id == "4"){
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardReceiptionist.cshtml", dict)
+}else if(@role_id == "1"){
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardAdmin.cshtml", dict)
+}else if(@role_id == "6"){
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardAccounting.cshtml", dict)
+}else if(@role_id == "8"){
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardTax.cshtml", dict)
+}else if(@role_id == "7"){
+    @Html.Partial("~/Views/Shared/DashoardPartial/_DashboardFinance.cshtml", dict)
+}
+@* begin::Main Content *@

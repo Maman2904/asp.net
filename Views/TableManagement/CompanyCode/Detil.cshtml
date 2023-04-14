@@ -1,0 +1,29 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = "Detail Company Code";
+    var detil = ViewBag.DataCompany;
+}
+<!--begin::Main Content-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="30%">@Localizer["CompanyId"]</th>
+                        <td>@detil.company_id</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["Name"]</th>
+                        <td>@detil.name</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->

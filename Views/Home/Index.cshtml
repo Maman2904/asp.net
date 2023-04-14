@@ -1,0 +1,312 @@
+@using System;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@using Microsoft.Extensions.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization;
+
+@* @inject IStringLocalizer<> Localizer *@
+@inject IViewLocalizer Localizer
+@* @inject IHtmlLocalizer<SharedResource> HtmlLocalizer *@
+@* @inject IOptions<RequestLocalizationOptions> LocOptions *@
+	
+
+@{
+	@* Layout = "_LayoutPublic"; *@
+	var landing_page = ViewBag.landing_page;
+	var pop_up = ViewBag.pop_up;
+}
+
+<div class="d-flex flex-row-fluid bgi-size-cover bgi-position-center">
+	<div class="container bgi-no-repeat py-10 pb-20">
+		<div class="d-flex align-items-stretch text-left flex-column">
+			<!--begin::Heading-->
+			<div class="py-5 py-lg-8">
+				<img alt="Logo" src="~/media/images/logo-tufol.png" class="logo-default md-max-h-70px mb-3 max-h-60px">
+				<h1 class="font-weight-bolder font-size-lg-12 text-white" style="font-size:xx-large;">Tukar Faktur Online</h1>
+				<span class="font-size-3 text-white opacity-90 d-block pt-2 w-50">Online Invoice Exchange application for all Indesso Vendors</span>
+				<a asp-controller="Home" asp-action="RegistrationForm" class="text-primary font-weight-bolder"><button class="btn btn-primary font-weight-bold py-3 px-6 mr-2 mt-3">@Localizer["CreateAcc"]</button></a>
+				
+			</div>
+			<!--end::Heading-->
+		</div>
+	</div>
+</div>
+
+<div style="background-color: #EEF0F8;">
+						@* Curved BG *@
+						<div class="curved-bg position-relative mt-n12 d-none d-md-block">
+							<svg width="100%" height="75px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="">
+								<path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z" fill="#EEF0F8"></path>
+							</svg>
+						</div>
+						<div class="container mt-lg-n22 mt-n28">
+							<!--begin::Menu-->
+							<div class="row mt-10 justify-content-center">
+								<div class="col-lg-4 text-center">
+									<div class="card borderless bg-white border-0 shadow rounded-lg mb-4 mb-md-0" style="z-index: 0; border: 0">
+										<div class="card-body">
+											<div class="pb-10" style="position: relative">
+											<div style="position: absolute; z-index: -2; background-color: #EEF0F8; top: 90px; bottom: 0; width: 100%"></div>
+											<img class="img-fluid" src="~/media/images/easy.png">
+											<div class="text-dark font-weight-bolder font-size-h3 mt-5">Pengajuan Mudah</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 text-center" style="position: relative">
+									<div class="card borderless bg-white border-0 shadow rounded-lg mb-4 mb-md-0" style="z-index: 0; border: 0">
+										<div class="card-body">
+											<div class="pb-10" style="position: relative">
+											<div style="position: absolute; z-index: -2; background-color: #EEF0F8; top: 90px; bottom: 0; width: 100%"></div>
+											<img class="img-fluid" src="~/media/images/fast.png">
+											<div class="text-dark font-weight-bolder font-size-h3 mt-5">Proses Cepat</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 text-center" style="position: relative">
+									<div class="card borderless bg-white border-0 shadow rounded-lg mb-4 mb-md-0" style="z-index: 0; border: 0">
+										<div class="card-body">
+											<div class="pb-10" style="position: relative">
+												<div style="position: absolute; z-index: -2; background-color: #EEF0F8; top: 90px; bottom: 0; width: 100%"></div>
+												<img class="img-fluid" src="~/media/images/team.png">
+												<div class="text-dark font-weight-bolder font-size-h5 mt-5">Tim yang selalu siap membantu <br/>Selama Proses Pengajuan</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--end::Menu-->
+						</div>
+
+						<div class="d-flex flex-column-fluid">
+							<!--begin::Container-->
+							<div class="container">
+								<!--begin::Dashboard-->
+								<div class="card card-custom gutter-b mt-lg-10">
+									<div class="card-body">
+										<div class="row justify-content-center">
+											<!--begin: jadwal-->
+											<div class="col-md-6">
+												<div class="pt-30 pt-md-25 pb-5 px-5 text-center">
+													<!--begin::Icon-->
+													<div class="d-flex flex-center position-relative mb-25">
+														<span class="svg svg-fill-warning opacity-20 position-absolute">
+															<svg width="175" height="200">
+																<polyline points="87,0 174,50 174,150 87,200 0,150 0,50 87,0"></polyline>
+															</svg>
+														</span>
+														<span class="svg-icon svg-icon-warning svg-icon-5x">
+															<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/~/src/media/svg/icons/Home/Alarm-clock.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<rect x="0" y="0" width="24" height="24"/>
+																<path d="M7.14319965,19.3575259 C7.67122143,19.7615175 8.25104409,20.1012165 8.87097532,20.3649307 L7.89205065,22.0604779 C7.61590828,22.5387706 7.00431787,22.7026457 6.52602525,22.4265033 C6.04773263,22.150361 5.88385747,21.5387706 6.15999985,21.0604779 L7.14319965,19.3575259 Z M15.1367085,20.3616573 C15.756345,20.0972995 16.3358198,19.7569961 16.8634386,19.3524415 L17.8320512,21.0301278 C18.1081936,21.5084204 17.9443184,22.1200108 17.4660258,22.3961532 C16.9877332,22.6722956 16.3761428,22.5084204 16.1000004,22.0301278 L15.1367085,20.3616573 Z" fill="#000000"/>
+																<path d="M12,21 C7.581722,21 4,17.418278 4,13 C4,8.581722 7.581722,5 12,5 C16.418278,5 20,8.581722 20,13 C20,17.418278 16.418278,21 12,21 Z M19.068812,3.25407593 L20.8181344,5.00339833 C21.4039208,5.58918477 21.4039208,6.53893224 20.8181344,7.12471868 C20.2323479,7.71050512 19.2826005,7.71050512 18.696814,7.12471868 L16.9474916,5.37539627 C16.3617052,4.78960984 16.3617052,3.83986237 16.9474916,3.25407593 C17.5332781,2.66828949 18.4830255,2.66828949 19.068812,3.25407593 Z M5.29862906,2.88207799 C5.8844155,2.29629155 6.83416297,2.29629155 7.41994941,2.88207799 C8.00573585,3.46786443 8.00573585,4.4176119 7.41994941,5.00339833 L5.29862906,7.12471868 C4.71284263,7.71050512 3.76309516,7.71050512 3.17730872,7.12471868 C2.59152228,6.53893224 2.59152228,5.58918477 3.17730872,5.00339833 L5.29862906,2.88207799 Z" fill="#000000" opacity="0.3"/>
+																<path d="M11.9630156,7.5 L12.0475062,7.5 C12.3043819,7.5 12.5194647,7.69464724 12.5450248,7.95024814 L13,12.5 L16.2480695,14.3560397 C16.403857,14.4450611 16.5,14.6107328 16.5,14.7901613 L16.5,15 C16.5,15.2109164 16.3290185,15.3818979 16.1181021,15.3818979 C16.0841582,15.3818979 16.0503659,15.3773725 16.0176181,15.3684413 L11.3986612,14.1087258 C11.1672824,14.0456225 11.0132986,13.8271186 11.0316926,13.5879956 L11.4644883,7.96165175 C11.4845267,7.70115317 11.7017474,7.5 11.9630156,7.5 Z" fill="#000000"/>
+															</g>
+														</svg>
+														<!--end::Svg Icon-->
+													</span>
+													</div>
+													<!--end::Icon-->
+													<!--begin::Content-->
+													<span class="font-size-h1 d-block d-block font-weight-boldest text-dark-75 py-2">Jadwal Tukar Faktur</span>
+													<p class="mb-15 d-flex flex-column">
+														<span>Selasa dan Kamis (Pukul 09.00 - Pukul 16.00)</span>
+													</p>
+													<!--end::Content-->
+												</div>
+											</div>
+											<!--end: jadwal-->
+											<!--begin: jadwal-->
+											<div class="col-md-6">
+												<div class="pt-30 pt-md-25 pb-5 px-5 text-center">
+													<!--begin::Icon-->
+													<div class="d-flex flex-center position-relative mb-25">
+														<span class="svg svg-fill-success opacity-20 position-absolute">
+															<svg width="175" height="200">
+																<polyline points="87,0 174,50 174,150 87,200 0,150 0,50 87,0"></polyline>
+															</svg>
+														</span>
+														<span class="svg-icon svg-icon-success svg-icon-5x">
+															<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/~/src/media/svg/icons/Shopping/Credit-card.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<rect x="0" y="0" width="24" height="24"/>
+																<rect fill="#000000" opacity="0.3" x="2" y="5" width="20" height="14" rx="2"/>
+																<rect fill="#000000" x="2" y="8" width="20" height="3"/>
+																<rect fill="#000000" opacity="0.3" x="16" y="14" width="4" height="2" rx="1"/>
+															</g>
+														</svg>
+														<!--end::Svg Icon-->
+													</span>
+													</div>
+													<!--end::Icon-->
+													<!--begin::Content-->
+													<span class="font-size-h1 d-block font-weight-boldest text-dark-75 py-2">Jadwal Pembayaran</span>
+													<div class="text-left">
+														<!--begin::Data-->
+														<ol type="a">
+															<li>Indesso Tanah Abang: Jum'at, minggu 1 dan minggu 3</li>
+															<li>Indesso Cileungsi dan Purwokerto: Setiap hari Jum'at, kecuali Jum'at minggu terakhir</li>
+														</ol>
+														<!--end::Data-->
+													</div>
+													<!--end::Content-->
+												</div>
+											</div>
+											<!--end: jadwal-->
+										</div>
+									</div>
+								</div>
+								<!--end::Dashboard-->
+							</div>
+							<!--end::Container-->
+						</div>
+						<!-- Begin Flow -->
+						<div class="justify-content-center" style="background-color: #17a0b6;">
+							<div class="h-50px bgi-no-repeat bgi-position-x-center bgi-position-y-top bgi-size-cover" style="background-image: url('/media/images/curve-tosca-top-bg.png');"></div>
+							<div class="container pt-10">
+								<!--begin::Row-->
+								<div class="row mt-lg-5">
+									<div class="col-xl-6 p-5 card-rounded" style="background-color: #ffffff26;">
+										<div class="text-center">
+											<h1 class="text-white line-height-md font-weight-bolder letter-spacing-sm font-size-13 font-size-lg-15 mb-5 mb-lg-15">
+												Alur Proses<br>
+												<span style="background: linear-gradient(to right, #000000 0%, #000000 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;"></span>
+													<span id="kt_landing_hero_text">Ticketing Barang & Jasa</span>
+												</span>
+											</h1>
+										</div>
+										<div class="d-flex justify-content-center mb-12">
+											<div class="dark-outline rounded-lg w-md-500px py-5 px-10">
+												<div class="timeline timeline-4 h-md-600px">
+													<div class="timeline-bar"></div>
+													<div class="timeline-items">
+														<div class="timeline-item timeline-item-left">
+															<div class="timeline-badge">
+																<div class="bg-danger"></div>
+															</div>
+															<div class="timeline-label">
+																<span class="text-dark-75 font-weight-bolder font-size-h4">1. Create Ticket</span>
+															</div>
+															<div class="timeline-content justify-content-center">
+																<img class="img-fluid" src="~/media/images/create-ticketing.png"/>
+															</div>
+														</div>
+														<div class="timeline-item timeline-item-right">
+															<div class="timeline-badge">
+																<div class="bg-success"></div>
+															</div>
+															<div class="timeline-label text-primary">
+																<span class="text-dark-75 font-weight-bolder font-size-h4">2. Verification</span>
+															</div>
+															<div class="timeline-content justify-content-center">
+																<img class="img-fluid" src="~/media/images/verification.png"/>
+															</div>
+														</div>
+														<div class="timeline-item timeline-item-left">
+															<div class="timeline-badge">
+																<div class="bg-danger"></div>
+															</div>
+												
+															<div class="timeline-label">
+																<span class="text-dark-75 font-weight-bolder font-size-h4">3. Approved</span>
+															</div>
+												
+															<div class="timeline-content justify-content-center">
+																<img class="img-fluid" src="~/media/images/approved.png"/>
+															</div>
+														</div>
+														<div class="timeline-item timeline-item-right">
+															<div class="timeline-badge">
+																<div class="bg-success"></div>
+															</div>
+															<div class="timeline-label text-primary">
+																<span class="text-dark-75 font-weight-bolder font-size-h4">4. Get Paid</span>
+															</div>
+															<div class="timeline-content justify-content-center">
+																<img class="img-fluid" src="~/media/images/get-paid.png"/>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-6">
+										<!--begin::Engage Widget 5-->
+										<div class="card card-custom card-stretch bg-white">
+											<div class="card-body d-flex p-0">
+												<div class="flex-grow-1 bg-white p-12 card-rounded flex-grow-1 bgi-no-repeat">
+													<h3 class="text-dark-75 text-inverse-primary pb-5 font-weight-bolder">@landing_page.title</h3>
+													<!--begin::Data-->
+													<ol class="text-dark-75 text-inverse-primary pb-5 font-size-h6">
+														<li>@Localizer["TermNo1"]</li>
+														<li>@Localizer["TermNo2"]</li>
+														<li>@Localizer["TermNo3"]</li>
+														<li>@Localizer["TermNo4"]</li>
+														<li>@Localizer["TermNo5"]</li>
+														<li>@Localizer["TermNo6"]</li>
+													</ol>
+													<!--end::Data-->
+													<!--begin::Item-->
+													<div class="mb-3">
+														<!--begin::Content-->
+														<div class="d-flex align-items-center flex-grow-1">
+															<!--begin::Section-->
+															<div class="d-flex flex-wrap align-items-center justify-content-between w-100">
+																<!--begin::Info-->
+																<div class="d-flex flex-column align-items-cente">
+																	<!--begin::Title-->
+																	<a href="#" class="text-danger font-weight-bold text-hover-danger font-size-lg">PENTING :</a>
+																	<!--end::Title-->
+																	<!--begin::Data-->
+																	@Html.Raw(System.Web.HttpUtility.HtmlDecode(@landing_page.content))
+																	<!--end::Data-->
+																</div>
+																<!--end::Info-->
+															</div>
+															<!--end::Section-->
+														</div>
+														<!--end::Content-->
+													</div>
+													<!--end::Item-->
+												</div>
+											</div>
+										</div>
+										<!--end::Engage Widget 5-->
+									</div>
+								</div>
+																
+							</div>
+							<div class="h-lg-100px bgi-no-repeat bgi-position-x-center bgi-position-y-top bgi-size-cover" ></div>
+						</div>
+						</div>
+
+<!-- Modal-->
+<div class="modal fade" id="modalHome" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@pop_up.title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+				@Html.Raw(System.Web.HttpUtility.HtmlDecode(@pop_up.content))
+            </div>
+            <div class="modal-footer">
+                @* <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button> *@
+                <button type="button" class="btn btn-primary font-weight-bold" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+	 <script>
+		 $('#modalHome').modal('show');
+	 </script>
+}

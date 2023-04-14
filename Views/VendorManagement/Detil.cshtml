@@ -1,0 +1,104 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+    var detil = ViewBag.vendor_data;
+    var last_data_change = ViewBag.last_data_change;
+    var log_vendor = ViewBag.role_id == "1" && ViewBag.actionName == "PendingVendor" ? detil.temp_log_vendor_status : detil.log_vendor;
+    var log_len = log_vendor == null? 0 : log_vendor.Count;
+}
+<!--begin::Main Content-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["Title"]</h3>
+                <div class="card-toolbar">
+                    <div class="card-toolbar">
+                        @if(ViewBag.role_id != "1" && ViewBag.actionName != "PendingVendor") {
+                            var position_data = last_data_change.position_data == null ?null : last_data_change.position_data.ToString();
+                            @if(detil.change_request_status == 0 && position_data != ViewBag.role_id) {
+                                <button type="button" class="btn btn-warning font-weight-bolder" data-toggle="modal" data-target="#changeRequest">
+                                    <i class="flaticon-time"></i> @Localizer["DataChangeRequest"]
+                                </button>
+                            }
+                        }
+                        <button type="button" class="btn btn-primary font-weight-bolder ml-3" data-toggle="modal" data-target="#logModal">
+                            <i class="flaticon2-list-2"></i> @Localizer["LogActivity"]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <partial name="_DetilVendor" view-data="ViewData">
+    </div>
+</div>
+<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@Localizer["LogActivity"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 400px;">
+                <div class="timeline timeline-2 mt-3 mb-3 ml-5 mr-3">
+                    <div class="timeline-bar"></div>
+                    @if(log_len == 0) {
+                        <div class="timeline-item">
+                            <div class="timeline-badge"><span class="bg-success"></span></div>
+                            <div class="timeline-content">
+                                @Localizer["LogNotAvailable"]
+                            </div>
+                        </div>
+                    } else {
+                        @foreach (var item in log_vendor)
+                        {
+                            <div class="timeline-item">
+                                <div class="timeline-badge"><span class="bg-success"></span></div>
+                                <div class="timeline-content">
+                                    <span class="text-dark-75 font-weight-bold">@item.created_at</span><br/>
+                                    @(ViewBag.role_id == "1" && ViewBag.actionName == "PendingVendor" ? item.verification_status : item.process)
+                                    <br/>
+                                    <p class="p-0" style="font-size: 0.9rem !important">
+                                        <i class="flaticon2-user" style="font-size: 0.9rem !important"></i> @item.created_by_name
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">@Localizer["Close"]</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="changeRequest" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@Localizer["DataChangeRequest"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 400px;">
+                <form method="POST"class="form" asp-controller="VendorManagement" asp-action="RequestData">
+                    <input type="hidden" class="form-control" name="vendor_number" value="@detil.vendor_number" />
+                    <label for="">Note</label>
+                    <br>
+                    <input type="text" class="form-control" name="change_request_note" id="change_request_note" cols="30" rows="10" />
+                    <br>
+                    <button type="submit" class="btn btn-warning">Request</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">@Localizer["Close"]</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->

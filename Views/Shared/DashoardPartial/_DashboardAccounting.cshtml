@@ -1,0 +1,72 @@
+@model Dictionary<string, string>
+
+<div class="row" style="display: flex; flex-direction: row;">
+  <div class="col-lg-3 mb-5" style="flex: 1">
+    <div class="card card-custom border border-dark">
+      <div class="card-body">
+        <i class="icon-2x text-dark-50 flaticon2-paper"></i>
+        <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["simulate_ticket"]</span>
+        <div>
+          <a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">For Simulation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 mb-5">
+    <div class="card card-custom border border-dark">
+      <div class="card-body">
+        <i class="icon-2x text-dark-50 flaticon2-paper"></i>
+        <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["pending_ticket"]</span>
+        <div>
+          <a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Pending Ticket</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 mb-5">
+    <div class="card card-custom border border-dark">
+      <div class="card-body">
+        <i class="icon-2x text-dark-50 flaticon2-paper"></i>
+        <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["error_ticket"]</span>
+        <div>
+          <a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Ticket Error</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-3 mb-5">
+    <div class="card card-custom border border-dark">
+      <div class="card-body">
+        <i class="icon-2x text-dark-50 flaticon2-paper"></i>
+        <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["approve_payment_ticket"]</span>
+        <div>
+          <a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Waiting For Payment</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 mb-5">
+    <div class="card card-custom border border-dark">
+      <div class="card-body">
+        <i class="icon-2x text-dark-50 flaticon2-paper"></i>
+        <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["paid_ticket"]</span>
+        <div>
+          <a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Paid</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 mb-5">
+    <div class="card card-custom border border-dark">
+      <div class="card-body">
+        <i class="icon-2x text-dark-50 flaticon2-paper"></i>
+        <span class="text-dark font-weight-bolder font-size-h2 mt-3 pt-3 pl-3">@Model["require_reversal_ticket"]</span>
+        <div>
+          <a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Require Reversal</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

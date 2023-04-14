@@ -1,0 +1,84 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = Localizer["Title"];
+}
+<!--begin::Content-->
+<!--begin::Card-->
+<div class="card card-custom">
+    <!--begin::Header-->
+    <div class="card-header py-3">
+        <div class="card-title align-items-start flex-column">
+            <h3 class="card-label font-weight-bolder text-dark">@ViewData["Title"]</h3>
+            <span class="text-muted font-weight-bold font-size-sm mt-1">@Localizer["SubTitle"]</span>
+        </div>
+    </div>
+    <!--end::Header-->
+    <!--begin::Form-->
+    <form class="form" method="POST" asp-controller="ChangePassword" asp-action="Index">
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-xl-3 col-lg-3 col-form-label text-alert">@Localizer["CurrentPassword"]</label>
+                <div class="col-lg-9 col-xl-9">
+                    <input type="password" class="form-control form-control-lg form-control-solid mb-2" value=""
+                        placeholder='@Localizer["CurrentPassword"]' name="currentPassword" required="required" />
+                    @* <a href="#" class="text-sm font-weight-bold">Forgot password ?</a> *@
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xl-3 col-lg-3 col-form-label text-alert">@Localizer["NewPassword"]</label>
+                <div class="col-lg-9 col-xl-9">
+                    <input type="password" class="form-control form-control-lg form-control-solid" value=""
+                        placeholder='@Localizer["NewPassword"]' name="NewPassword" required="required" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-xl-3 col-lg-3 col-form-label text-alert">@Localizer["VerifyPassword"]</label>
+                <div class="col-lg-9 col-xl-9">
+                    <input type="password" class="form-control form-control-lg form-control-solid" value=""
+                        placeholder='@Localizer["VerifyPassword"]' name="verifyPassword" required="required" />
+                </div>
+            </div>
+            <div class="card-toolbar">
+                <button type="submit" name="action" class="btn btn-success mr-2">@Localizer["Save"]</button>
+                <button type="reset" class="btn btn-secondary">@Localizer["Back"]</button>
+            </div>
+        </div>
+    </form>
+    <!--end::Form-->
+</div>
+<!--end::Content-->
+
+@section Scripts {
+<script type="text/javascript">
+    let error = "@ViewBag.error"
+    if (error) {
+        swal.fire({
+            text: error,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok!",
+            customClass: {
+                confirmButton: "btn font-weight-bold btn-light-primary"
+            }
+        }).then(function () {
+            KTUtil.scrollTop();
+        });
+    }
+
+    let reset_success = "@ViewBag.reset_success"
+    if (reset_success) {
+        swal.fire({
+            text: reset_success,
+            icon: "success",
+            buttonsStyling: false,
+            confirmButtonText: "Ok!",
+            customClass: {
+                confirmButton: "btn font-weight-bold btn-light-primary"
+            }
+        }).then(function () {
+            KTUtil.scrollTop();
+        });
+    }
+</script>
+}

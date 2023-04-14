@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Detail Bank";
+    var detil = ViewBag.DataVendorGroup;
+}
+<!--begin::Main Content-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="30%">Vendor Group ID</th>
+                        <td>@detil.vendor_type_id</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">Name</th>
+                        <td>@detil.name</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">Sap Code</th>
+                        <td>@detil.sap_code</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">Scheme_Group_id</th>
+                        <td>@detil.scheme_group_id</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">gl_id</th>
+                        <td>@detil.gl_id</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->

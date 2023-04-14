@@ -1,0 +1,737 @@
+@model tufol.Models.RegistrationModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+@using Microsoft.SqlServer.Management.Sdk.Sfc;
+
+@inject IViewLocalizer Localizer
+@{
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var forEdit = ViewBag.controller == "VendorManagement" || ViewBag.controller == "Revision" || ViewBag.Controller == "ChangeVendor" ? null : "style=display:none";
+    var forEditCol = ViewBag.controller == "VendorManagement" || ViewBag.controller == "Revision" || ViewBag.Controller == "ChangeVendor" ? "col-lg-4" : "col-lg-6";
+    var data = ViewBag.vendor_data;
+    var no = 0;
+    var role_id = ViewData["idRole"];
+}
+@if(ViewBag.Controller == "ChangeVendor"){
+    <input type="hidden" name="vendor_id" value="@ViewBag.vendor_id" />
+    <input type="hidden" name="vendor_number" value="@data.vendor_number" />
+} else {
+    <input type="hidden" name="vendor_id" value="@data.vendor_id" />
+}
+@if(ViewBag.controller == "ChangeVendor") {
+    @if(!string.IsNullOrEmpty(ViewBag.verification_status) || !string.IsNullOrEmpty(data.change_request_note)) {
+    <div class="alert alert-custom alert-notice alert-default fade show" role="alert">
+        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+        <div class="alert-text">
+            Status: @(!string.IsNullOrEmpty(ViewBag.verification_status) ?ViewBag.verification_status : "Need Revision")
+            @if (!string.IsNullOrEmpty(ViewBag.verification_status) || !string.IsNullOrEmpty(data.change_request_note))
+            {
+            <div>Note: @(!string.IsNullOrEmpty(ViewBag.verification_status) ? ViewBag.verification_status_note : data.change_request_note)</div>
+            }
+        </div>
+    </div>
+    }
+}
+@if(!String.IsNullOrEmpty(ViewBag.error_message)) {
+    <div class="alert alert-custom alert-notice alert-danger fade show" role="alert">
+        <div class="alert-icon"><i class="flaticon-circle"></i></div>
+        <div class="alert-text">
+            @ViewBag.error_message
+        </div>
+        <div class="alert-close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><i class="ki ki-close"></i></span>
+            </button>
+        </div>
+    </div>
+}
+@if(ViewBag.controller != "Home") {
+    @if(data.status_rpa) {
+        <div class="alert alert-custom alert-notice alert-default fade show" role="alert">
+            <div class="alert-icon"><i class="flaticon-warning"></i></div>
+            <div class="alert-text">
+                Note RPA: @(String.IsNullOrEmpty(data.rpa_status_description) ? "-" : data.rpa_status_description)
+            </div>
+            <div class="alert-close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"><i class="ki ki-close"></i></span>
+                </button>
+            </div>
+        </div>
+    }
+}
+<div class="card card-custom gutter-b">
+    <div class="card-header border-0">
+        <h3 class="card-title">@Localizer["Legend"]</h3>
+        <div class="col-3 mt-8 mb-8 h-25 align-items-center d-flex mb-3">
+            <span class="label label-xl font-weight-boldest label-rounded input-dropdown"></span>
+            <span class="ml-3">@Localizer["LegendDropdown"]</span>
+        </div>
+        <div class="col-3 mt-8 mb-8 h-25 align-items-center d-flex mb-3">
+            <span class="label label-xl font-weight-boldest label-rounded input-mandatory"></span>
+            <span class="ml-3">@Localizer["LegendText"]</span>
+        </div>
+        <div class="col-3 mt-8 mb-8 h-25 align-items-center d-flex mb-3">
+            <span class="label label-xl font-weight-boldest label-rounded input-additional"></span>
+            <span class="ml-3">@Localizer["LegendAdditional"]</span>
+        </div>
+    </div>
+</div>
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["OrgLevel"]</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row" @forEdit>
+            <div class="col-6">
+                <label>@Localizer["VendorType"] <span class="text-danger">*</span></label>
+                @if((String.IsNullOrEmpty(data.vendor_number) && ViewBag.Controller == "ChangeVendor") || !String.IsNullOrEmpty(data.vendor_number)) {
+                    @if(ViewBag.controller == "Home" || ViewBag.controller == "Revision") {
+                        <input type="hidden" name="vendor_type_id" id="hidden_vendor_type_id" value="@data.vendor_type_id">
+                    } else {
+                        <input type="text" class="form-control" value="@data.vendor_type_name" readonly>
+                        <input type="hidden" name="vendor_type_id" id="hidden_vendor_type_id" value="@data.vendor_type_id">
+                    }
+                } else {
+                    <select class="form-control select2 kt_select2_vendor_type_id" asp-for="vendor_type_id" id="vendor_type_id">
+                        <option value="">Label</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="vendor_type_id"></span>
+                    <input type="hidden" name="vendor_type_id" id="hidden_vendor_type_id" value="@data.vendor_type_id">
+                }                
+            </div>
+            <div class="col-6">
+                <label>@Localizer["SgCategory"] <span class="text-danger">*</span></label>
+                <select class="form-control select2 kt_select_sg_category_id" asp-for="sg_category_id" id="sg_category_id">
+                </select>
+                <input type="hidden" asp-for="sg_category_id" name="sg_category_id" id="hidden_sg_category_id" value="@data.sg_category_id">
+            </div>
+            @* input account_group_id *@
+            <input type="hidden" asp-for="account_group_id" name="account_group_id" id="account_group_id" value="@data.account_group_id">
+        </div>
+        @if(ViewBag.Controller == "VendorManagement" || ViewBag.Controller == "Revision" || ViewBag.Controller == "ChangeVendor") {
+            <div id="company_container">
+                @if(data.company != null) {
+                    @foreach (var item in data.company)
+                    {
+                        <div class="form-group company row">
+                            <div class='col-6 col-xs-12'>
+                                <label>@Localizer["Company"] (@(no > 0 ? Localizer["Secondary"] : Localizer["Primary"]) @(no > 0 ? no : null)) <span class="text-danger">*</span></label>
+                                @if((String.IsNullOrEmpty(data.vendor_number) && ViewBag.Controller == "ChangeVendor") || !String.IsNullOrEmpty(data.vendor_number)) {                                
+                                    <input type="hidden" id="company_id_@no" name="company_id[]" value="@item.company_id">
+                                    <input type="text" class="form-control" value="@item.name" readonly>
+                                } else {
+                                    <select class="form-control selectpicker" data-style='@(no > 0 ? "input-additional" : "input-dropdown")' asp-for="company_id" name="company_id[]" id="company_id_@no">
+                                    </select>
+                                    <span class="text-danger" asp-validation-for="company_id"></span>
+                                }
+                            </div>
+                            <div class='@((ViewBag.Controller != "ChangeVendor" && String.IsNullOrEmpty(data.vendor_number)) && !String.IsNullOrEmpty(data.vendor_number) && no > 0 ? "col-5" : "col-6") + col-xs-12'>
+                                <label>@Localizer["PurchOrg"] <span class="text-danger">*</span></label>
+                                @if((String.IsNullOrEmpty(data.vendor_number) && ViewBag.Controller == "ChangeVendor") || !String.IsNullOrEmpty(data.vendor_number)) {                                
+                                    <input type="hidden" id="purchase_organization_id_@no" name="purchase_organization_id[]" value="@item.purchase_organization_id">
+                                    <input type="text" class="form-control" value="@item.purchase_organization_name" readonly>
+                                } else {
+                                    <select class="form-control selectpicker" data-style='@(no > 0 ? "input-additional" : "input-dropdown")' asp-for="purchase_organization_id" name="purchase_organization_id[]" id="purchase_organization_id_@no">
+                                    </select>
+                                }
+                            </div>
+                            @if((ViewBag.Controller != "ChangeVendor" && String.IsNullOrEmpty(data.vendor_number)) && !String.IsNullOrEmpty(data.vendor_number) && no > 0) {
+                                <div class="col-sm-1 col-xs-12">
+                                    <button type="button" class="btn btn-secondary mt-8" style="cursor: pointer;" onclick="deleteCompany($(this))">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                        no++;
+                    }
+                } else {
+                    <div class="form-group row">
+                        <div class="col-6 col-xs-12">
+                            <label>@Localizer["Company"] (@Localizer["Primary"]) <span class="text-danger">*</span></label>
+                            <select class="form-control selectpicker" data-style="input-dropdown" asp-for="company_id" name="company_id[]" id="company_id_@no">
+                            </select>
+                            <span class="text-danger" asp-validation-for="company_id"></span>
+                        </div>
+                        <div class="col-6 col-xs-12">
+                            <label>@Localizer["PurchOrg"] <span class="text-danger">*</span></label>
+                            <select class="form-control selectpicker" data-style="input-dropdown" asp-for="purchase_organization_id" name="purchase_organization_id[]" id="purchase_organization_id_@no">
+                            </select>
+                        </div>
+                    </div>
+                }
+            </div>
+            <a href="javascript:;" id="btn_add_company"><i class="fa fa-plus"></i> @Localizer["AddComp"]</a>
+            <div class="form-group row mt-5">
+                <div class="col-3 col-xs-12">
+                    <label>@Localizer["Currency"] <span class="text-danger">*</span></label>
+                    <select class="form-control kt_select2_currency" asp-for="currency_id" name="currency_id" id="currency_id">
+                        <option value="">Label</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="currency_id"></span>
+                </div>
+                <div id="top_id_scroll" class="col-3" @forEdit>
+                    <label>@Localizer["PaymentTerm"] <span class="text-danger">*</span></label>
+                    <select class="form-control select2 kt_select2_top" asp-for="top_id" name="top_id">
+                        <option value="">Label</option>
+                    </select>
+                    <span id="top_id_error" class="text-danger" asp-validation-for="top_id"></span>
+                </div>
+                <div class="col-3" @forEdit>
+                    <label class="mb-3">@Localizer["AccGroup"]</label><br>
+                    <span id="account_group" class="text-danger">-</span>
+                </div>
+                <div class="col-3" @forEdit>
+                    <label class="mb-3">@Localizer["SchemaGroup"]</label><br>
+                    <span id="scheme_group" class="text-danger">-</span>
+                </div>
+            </div>
+        } else {
+            <div class="form-group row">
+                <div class="col-6" id="company_container">
+                    <label>@Localizer["Company"] (@Localizer["Primary"]) <span class="text-danger">*</span></label>
+                    <select class="form-control selectpicker" data-style="input-dropdown" asp-for="company_id" name="company_id[]" id="company_id_0">
+                    </select>
+                    <span class="text-danger" asp-validation-for="company_id"></span>
+                </div>
+                <div class="col-6">
+                    <label>@Localizer["Currency"] <span class="text-danger">*</span></label>
+                    <select class="form-control kt_select2_currency" asp-for="currency_id" name="currency_id" id="currency_id">
+                        <option value="">Label</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="currency_id"></span>
+                </div>
+                <a href="javascript:;" id="btn_add_company"><i class="fa fa-plus"></i> @Localizer["AddComp"]</a>
+            </div>
+        }
+    </div>
+</div>
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["BasicData"]</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-4">
+                <label>@Localizer["TitleDB"] <span class="text-danger">*</span></label>
+                <select class="form-control selectpicker" data-style="input-dropdown" asp-for="title_id" name="title_id" id="title">
+                </select>
+                <span class="text-danger" asp-validation-for="title_id"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["NameVendor"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="name" name="name" maxlength="256" value="@data.name" />
+                </div>
+                <span class="text-danger" asp-validation-for="name"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["CP"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="contact_person" name="contact_person" maxlength="256" value="@data.contact_person"/>
+                </div>
+                <span class="text-danger" asp-validation-for="contact_person"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label>@Localizer["SearchTerm"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="search_term" name="search_term" maxlength="20" value="@data.search_term"/>
+                </div>
+                <span class="text-danger" asp-validation-for="search_term"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["StreetHouse"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="street_address" name="street_address" maxlength="60" value="@data.street_address"/>
+                </div>
+                <span class="text-danger" asp-validation-for="street_address"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["Street4"]</label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-additional" placeholder='@Localizer["Ex"] ABC' asp-for="additional_street_address"  name="additional_street_address" maxlength="40" value="@data.additional_street_address"/>
+                </div>
+                <span class="text-danger" asp-validation-for="additional_street_address"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label>@Localizer["City"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="city" name="city" maxlength="60" value="@data.city" />
+                </div>
+                <span class="text-danger" asp-validation-for="city"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["PostCode"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] 12345' asp-for="postal_code" name="postal_code" maxlength="60" value="@data.postal_code"/>
+                </div>
+                <span class="text-danger" asp-validation-for="postal_code"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["Country"] <span class="text-danger">*</span></label>
+                <select class="form-control select2 kt_select2_country" asp-for='country_id' name="country_id" id="country_id" >
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="country_id"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label>@Localizer["Tel"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    @* <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] 021123456789' id="kt_input_number" maxlength="20" value="@data.telephone"/> *@
+                    <select class="form-control select2 input-mandatory" multiple="multiple" id="kt_select2_telephone"></select>
+                </div>
+                <input type="hidden" asp-for="telephone" name="telephone" id="hidden-telephone" value="@data.telephone" maxlength="132">
+                <span class="text-danger" asp-validation-for="telephone" id="valid-telephone"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["Fax"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-mandatory" placeholder='@Localizer["Ex"] zzz' asp-for="fax" name="fax" maxlength="20" value="@data.fax"/>
+                </div>
+                <span class="text-danger" asp-validation-for="fax"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["Email"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <select class="form-control select2 input-mandatory" multiple="multiple" id="kt_select2_email"></select>
+                </div>
+                <input type="hidden" asp-for="email" name="email" id="hidden-email" value="@data.email" maxlength="132">
+                <span class="text-danger" asp-validation-for="email" id="valid-email"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["TaxCat"]</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-6">
+                <label>@Localizer["ServiceCat"] <span class="text-danger">*</span></label>
+                <select class="form-control kt_select2_tax_type" asp-for="tax_type_id" name="tax_type_id" id="tax_type_id">
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="tax_type_id"></span>
+            </div>
+            <div class="col-3">
+                <label>@Localizer["WithholdingType"]</label>
+                <div class="input-group text-danger">
+                    <span class="mt-3" id="wht_type">-</span>
+                </div>
+            </div>
+            <div class="col-3">
+                <label>@Localizer["WithholdingCode"]</label>
+                <div class="input-group text-danger">
+                    <span class="mt-3" id="wht_code">-</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["TaxNumType"] <span class="text-danger">*</span></label>
+                <select class="form-control kt_select2_tax_number_type" asp-for="tax_number_type_id" name="tax_number_type_id" id="tax_number_type_id">
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="tax_number_type_id"></span>
+            </div>
+            <div class="col-3">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["NPWP"] <span class="text-danger valid-npwp"></span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-additional" placeholder='@Localizer["Ex"] 123456789' asp-for="npwp" name="npwp" id="npwp" value="@data.npwp"/>
+                </div>
+                <span class="text-danger" asp-validation-for="npwp"></span>
+            </div>
+            <div class="col-3">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["KTP"] <span class="text-danger valid-ktp"></span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-additional" placeholder='@Localizer["Ex"] 123456789' asp-for="id_card_number" name="id_card_number" id="id_card_number" value="@data.id_card_number"/>
+                </div>
+                <span class="text-danger" asp-validation-for="id_card_number" id="valid-id-card"></span>
+            </div>
+            <div class="col-3">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["PKP"] <span class="text-danger valid-sppkp"></span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-additional" placeholder='@Localizer["Ex"] 123456789' asp-for="sppkp_number" name="sppkp_number" value="@data.sppkp_number"/>
+                </div>
+                <span class="text-danger" asp-validation-for="sppkp_number" id="valid-sppkp"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-custom gutter-b" id="localidr_bank">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["LocalBankAcc"] (IDR)</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-6">
+                <label>@Localizer["BankName"] <span class="text-danger">*</span></label>
+                <select class="form-control kt_select2_bank localidr_bank_input input-mandatory" asp-for="localidr_bank_id" name="localidr_bank_id" id="localidr_bank_id">
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="localidr_bank_id"></span>
+            </div>
+            <div class="col-3">
+                <label>@Localizer["BankKey"]</label>
+                <div class="input-group text-danger">
+                    <span class="mt-3" id="localidr_bank_key">-</span>
+                </div>
+            </div>
+            <div class="col-3">
+                <label>@Localizer["SwiftCode"]</label>
+                <div class="input-group text-danger">
+                    <span class="mt-3" id="localidr_swift_code">-</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-6">
+                <label>@Localizer["BankAcc"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control localidr_bank_input input-mandatory" placeholder='@Localizer["Ex"] 123' asp-for="localidr_bank_account" name="localidr_bank_account" maxlength="20" value="@data.localidr_bank_account" />
+                </div>
+                <span class="text-danger" asp-validation-for="localidr_bank_account"></span>
+            </div>
+            <div class="col-6">
+                <label>@Localizer["AccHolder"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control localidr_bank_input input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="localidr_account_holder" name="localidr_account_holder" maxlength="256" value="@data.localidr_account_holder" />
+                </div>
+                <span class="text-danger" asp-validation-for="localidr_account_holder"></span>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center">
+        <button type="button" class="btn btn-primary" id="btn-localforex" value="1">@Localizer["Add"] @Localizer["LocalBankAcc"] (Forex)</button>
+    </div>
+</div>
+
+<div class="card card-custom gutter-b" id="localforex_bank" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["LocalBankAcc"] (Forex)</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-4">
+                <label>@Localizer["BankName"] <span class="text-danger">*</span></label><br>
+                <select class="form-control kt_select2_bank localforex_bank_input input-mandatory" asp-for="localforex_bank_id" name="localforex_bank_id">
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="localforex_bank_id"></span>
+            </div>
+            <div class="col-2">
+                <label>@Localizer["BankKey"]</label>
+                <div class="input-group text-danger">
+                    <span class="mt-3" id="localforex_bank_key">-</span>
+                </div>
+            </div>
+            <div class="col-2">
+                <label>@Localizer["SwiftCode"]</label>
+                <div class="input-group text-danger">
+                    <span class="mt-3" id="localforex_swift_code">-</span>
+                </div>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["Currency"] <span class="text-danger">*</span></label><br>
+                <select class="form-control select2 kt_select2_currency localforex_bank_input input-mandatory" asp-for="localforex_currency_id" name="localforex_currency_id">
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="localforex_currency_id"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-6">
+                <label>@Localizer["BankAcc"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control localforex_bank_input input-mandatory" placeholder='@Localizer["Ex"] 123' asp-for="localforex_bank_account" name="localforex_bank_account" maxlength="20" value="@data.localforex_bank_account"/>
+                </div>
+                <span class="text-danger" asp-validation-for="localforex_bank_account"></span>
+            </div>
+            <div class="col-6">
+                <label>@Localizer["AccHolder"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control localforex_bank_input input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="localforex_account_holder" name="localforex_account_holder" maxlength="256" value="@data.localforex_account_holder"/>
+                </div>
+                <span class="text-danger" asp-validation-for="localforex_account_holder"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-custom gutter-b" id="foreign_bank">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["ForeignBankAcc"] (Forex)</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-6">
+                <label>@Localizer["CountryofOrigin"] <span class="text-danger">*</span></label>
+                <select class="form-control select2 kt_select2_country_origin foreign_bank_input input-mandatory" asp-for="foreign_bank_country_id" name="foreign_bank_country_id">
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="foreign_bank_country_id"></span>
+            </div>
+            <div class="col-6">
+                <label>@Localizer["Currency"] <span class="text-danger">*</span></label>
+                <select class="form-control select2 kt_select2_currency foreign_bank_input input-mandatory" asp-for="foreign_currency_id" name="foreign_currency_id">
+                    <option value="">Label</option>
+                </select>
+                <span class="text-danger" asp-validation-for="foreign_currency_id"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label>@Localizer["BankName"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control foreign_bank_input input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="foreign_bank_name" name="foreign_bank_name" maxlength="30" value="@data.foreign_bank_name"/>
+                </div>
+                <span class="text-danger" asp-validation-for="foreign_bank_name"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["BankAcc"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control foreign_bank_input input-mandatory" placeholder='@Localizer["Ex"] 123' asp-for="foreign_bank_account" name="foreign_bank_account" maxlength="20" value="@data.foreign_bank_account"/>
+                </div>
+                <span class="text-danger" asp-validation-for="foreign_bank_account"></span>
+            </div>
+            
+            @* <div id="foreign_bank_key" class="@forEditCol" @forEdit>
+                <label>@Localizer["BankKey"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control foreign_bank_input input-mandatory foreign_bank_key" asp-for="foreign_bank_id" name="foreign_bank_id"  placeholder='@Localizer["Ex"] 123' maxlength="30" value="@data.foreign_bank_id"/>
+                </div>
+                <span class="text-danger" asp-validation-for="foreign_bank_id"></span>
+            </div> *@
+            
+            <div class="col-4">
+                <label>@Localizer["SwiftCode"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control foreign_bank_input input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="foreign_bank_swift_code" name="foreign_bank_swift_code" maxlength="15" value="@data.foreign_bank_swift_code"/>
+                </div>
+                <span class="text-danger" asp-validation-for="foreign_bank_swift_code"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label>@Localizer["AccHolder"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control foreign_bank_input input-mandatory" placeholder='@Localizer["Ex"] ABC' asp-for="foreign_account_holder" name="foreign_account_holder" maxlength="254" value="@data.foreign_account_holder"/>
+                </div>
+                <span class="text-danger" asp-validation-for="foreign_account_holder"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["ReferenceCorr"]</label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-additional" placeholder='@Localizer["Ex"] ABC' asp-for="reference_correspondent" name="reference_correspondent" maxlength="256" value="@data.reference_correspondent"/>
+                </div>
+                <span class="text-danger" asp-validation-for="reference_correspondent"></span>
+            </div>
+            <div class="col-4">
+                <label>@Localizer["ReferenceCountry"]</label>
+                <div class="input-group">
+                    <input type="text" class="form-control input-additional" placeholder='@Localizer["Ex"] ABC' asp-for="reference_country_origin" name="reference_country_origin" maxlength="256" value="@data.reference_country_origin"/>
+                </div>
+                <span class="text-danger" asp-validation-for="reference_country_origin"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["AccAssignment"]</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-3" @forEdit>
+                <label class="mb-3">@Localizer["ReconAcc"]</label><br>
+                <span class="text-danger" id="recon-acc"></span>
+            </div>
+            <div class="col-3" @forEdit>
+                <label class="mb-3">@Localizer["CashManGroup"]</label><br>
+                <span class="text-danger" id="cash-management"></span>
+            </div>
+            <div class="col-3">
+                <label>@Localizer["PIC"] <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <select class="form-control select2 kt_select2_pic" asp-for="pic_id" name="pic_id">
+                        <option value="">Label</option>
+                    </select>
+                </div>
+                <span class="text-danger" asp-validation-for="pic_id"></span>
+            </div>
+            <div class="col-3" @forEdit>
+            <label>@Localizer["Partner"]</label>
+                <div class="input-group">
+                    <select class="form-control select2 kt_select2_partner" asp-for="partner_function" name="partner_function" id="partner">
+                        <option value="">Label</option>
+                    </select>
+                </div>
+                <span id="partner_function_error" class="text-danger" asp-validation-for="partner_function"></span>
+            </div> 
+        </div>
+    </div>
+</div>
+
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["Upload"] (<span class="text-danger">@Localizer["MaxUpload"]</span>)</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-3">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["IdCard"]  <span class="text-danger">*</span></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file_id_card" asp-for="file_id_card" name="file_id_card" />
+                    <label class="custom-file-label" for="file_id_card">@Localizer["ChooseFile"]</label>
+                    @if(data.file_id_card != null && data.file_id_card.Length != 0) {
+                        <label><a href="@ViewBag.BaseUrl@data.file_id_card">@Localizer["DownloadDoc"]</a> </label>
+                    }
+                </div>
+                <span class="text-danger" asp-validation-for="file_id_card"></span>
+            </div>
+            <div class="col-3">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["NPWPUpload"] <span class="text-danger valid-npwp"></span></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file_npwp" asp-for="file_npwp" name="file_npwp" id="file_npwp" />
+                    <label class="custom-file-label" for="file_npwp">@Localizer["ChooseFile"]</label>
+                    @if(data.file_npwp != null && data.file_npwp.Length != 0) {
+                        <label><a href="@ViewBag.BaseUrl@data.file_npwp">@Localizer["DownloadDoc"]</a></label>
+                    }
+                </div>
+                <span class="text-danger" asp-validation-for="file_npwp"></span>
+            </div>
+            <div class="col-3" id="file_sppkp">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["Sppkp"] <span class="text-danger valid-sppkp"></span></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" asp-for="file_sppkp" name="file_sppkp" id="file_sppkp" />
+                    <label class="custom-file-label" for="file_sppkp">@Localizer["ChooseFile"]</label>
+                    @if(data.file_sppkp != null && data.file_sppkp.Length != 0) {
+                        <label><a href="@ViewBag.BaseUrl@data.file_sppkp">@Localizer["DownloadDoc"]</a></label>
+                    }
+                </div>
+                <span class="text-danger" asp-validation-for="file_sppkp"></span>
+            </div>
+            <div class="col-3">
+                <label class="h-25 align-items-center d-flex mb-3">@Localizer["VendorStatement"]  <span class="text-danger">*</span></label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file_vendor_statement" asp-for="file_vendor_statement" name="file_vendor_statement" />
+                    <label class="custom-file-label" for="file_vendor_statement">@Localizer["ChooseFile"]</label>
+                    @if(data.file_vendor_statement != null && data.file_vendor_statement.Length != 0) {
+                        <label><a href="@ViewBag.BaseUrl@data.file_vendor_statement">@Localizer["DownloadDoc"]</a></label>
+                    }
+                </div>
+                <span class="text-danger" asp-validation-for="file_vendor_statement"></span>
+            </div>
+        </div>        
+
+        @if(ViewBag.controller == "VendorManagement") {
+            <div class="form-group row">
+                <div class="col-12">
+                    <label>@Localizer["Note"] <span class="text-danger valid-verification-note"></span></label>
+                    <textarea class="form-control input-additional" name="verification_note" id="note" cols="20" rows="10">@data.verification_note</textarea>
+                    <span class="text-danger" asp-validation-for="verification_note" id="verification-note"></span>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="card-footer text-center">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                @if(ViewBag.controller == "VendorManagement") {
+                    <button type="submit" asp-action="Approve" id="btn-approve" class="btn btn-primary mr-2">Approve</button>
+                    <button type="submit" asp-action="Revise" id="btn-revise" class="btn btn-warning mr-2">Revise</button>
+                    <button type="submit" asp-action="Reject" id="btn-reject" class="btn btn-danger">Reject</button>
+                } else if(ViewBag.controller == "ChangeVendor") {
+                    <button type="submit" name="action" value="Draft" class="btn btn-warning mr-2">@Localizer["Draft"]</button>
+                    <button type="submit" name="action" value="Send" class="btn btn-primary mr-2">@Localizer["Send"]</button>
+                } else {
+                    <button type="submit" class="btn btn-primary mr-2">@Localizer["Send"]</button>
+                    <button type="reset" class="btn btn-danger mr-2">@Localizer["Delete"]</button>
+                    <a href='/@culture'><button type="button" class="btn btn-secondary">@Localizer["Back"]</button></a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var controller = "@ViewBag.controller";
+    var roleId = "@role_id";
+    var language = "@ViewBag.language";
+    var data_company = JSON.parse('@Html.Raw(Json.Serialize(data.company))');
+    var currency_id = "@data.currency_id";
+    var title_id = "@data.title_id";
+    var top_id = "@data.top_id";
+    var country_id = "@data.country_id";
+    var email = "@data.email";
+    var telephone = "@data.telephone";
+    var tax_type_id = "@data.tax_type_id";
+    var tax_number_type_id = "@data.tax_number_type_id";
+    var localidr_bank_id = "@data.localidr_bank_id";
+    var localforex_bank_id = "@data.localforex_bank_id";
+    var localforex_currency_id = "@data.localforex_currency_id";
+    var foreign_bank_country_id = "@data.foreign_bank_country_id";
+    var foreign_currency_id = "@data.foreign_currency_id";
+    var pic_id = "@data.pic_id";
+    var province_id = "@data.partner_function";
+    
+    var btn_add_localforex = '@Localizer["Add"] @Localizer["LocalBankAcc"] (Forex)'
+    var btn_hide_localforex = '@Localizer["Hide"] @Localizer["LocalBankAcc"] (Forex)'
+
+    var placeholder_vendor_type = '@Localizer["PlaceholderVendorType"]'
+    var placeholder_top = '@Localizer["PlaceholderTop"]'
+    var placeholder_country = '@Localizer["PlaceholderCountry"]'
+    var placeholder_country_origin = '@Localizer["PlaceholderCountryOrigin"]'
+    var placeholder_currency = '@Localizer["PlaceholderCurrency"]'
+    var placeholder_tax_type = '@Localizer["PlaceholderTaxType"]'
+    var placeholder_tax_num_type = '@Localizer["PlaceholderTaxNumType"]'
+    var placeholder_bank = '@Localizer["PlaceholderBank"]'
+    var placeholder_email = '@Localizer["PlaceholderEmail"]'
+    var placeholder_telephone = '@Localizer["PlaceholderTelephone"]'
+    var placeholder_pic = '@Localizer["PlaceholderPic"]'
+    var placeholder_partner = '@Localizer["PlaceholderPartner"]'
+
+    var company = '@Localizer["Company"]'
+    var purchase_organization = '@Localizer["PurchOrg"]'
+    var secondary = '@Localizer["Secondary"]'
+    var delete_company = '@Localizer["DelComp"]'
+
+    var note = '@Localizer["ValidNote"]'
+    var sppkp = '@Localizer["ValidSppkp"]'
+    var ktp = '@Localizer["ValidKtp"]'
+    var valid_email = '@Localizer["ValidEmail"]'
+    var valid_telephone = '@Localizer["ValidTelephone"]'
+
+    var no = '@no'
+
+    var list_email = [];
+    if(email != null) {
+        var email_split = email.split(';');
+        list_email.push(...email_split);
+    }
+
+    var list_telephone = [];
+    if(telephone != null) {
+        var telephone_split = telephone.split(';');
+        list_telephone.push(...telephone_split);
+    }
+</script>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/apps/form_vendor.js?v=1.4.8"></script>
+}

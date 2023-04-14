@@ -1,0 +1,19 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+}
+
+@* begin::Main Content *@
+<div class="row">
+    <div class="col-lg-12">
+        <form class="form" method="POST" asp-controller="ChangeVendor" asp-action="Index" enctype="multipart/form-data">
+            <partial name="_FormVendor" view-data="ViewData">
+        </form>
+    </div>
+</div>
+@* begin::Main Content *@
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/apps/form_vendor.js?v=1.4.8"></script>
+}

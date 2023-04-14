@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+    var role = ViewBag.idRole;
+}
+
+@* begin::Main Content *@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-custom">
+            <div class="card-body">
+                <!--begin: Datatable-->
+                <table class="table table-bordered table-responsive table-hover" id="kt_datatable_draft">
+                    <thead>
+                        <tr>
+                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@* begin::Main Content *@
+@section Scripts{
+    <script>
+        var role_id = "@role"
+    </script>
+    <script type="text/javascript" src="~/plugins/custom/datatables/datatables.bundle.js?v=7.2.8"></script>
+    <script src="~/js/apps/change_ticket.js?v=1.0.0"></script>
+}

@@ -1,0 +1,703 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    var detil = ViewBag.ticket_data;
+    var log_ticket = detil.log_ticket;
+    var dpp_ppn = detil.dpp + detil.ppn;
+    var barcode = ViewBag.BaseUrl + "/document/barcode_ticket/" + detil.ticket_number + ".png";
+    var table_po = detil.table_po;
+    var simulation_result = ViewBag.simulation_result;
+}
+<!--begin::Main Content-->
+
+@if(ViewBag.role_id == "6") {
+    <div class="row mb-5">
+        <button type="button" class="btn btn-warning ml-4" data-toggle="modal" data-target="#simulateResult">@Localizer["SimulationResult"]</button>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        @if(detil.is_finish) {
+            <div class="alert alert-custom alert-notice alert-success fade show" role="alert">
+                <div class="alert-icon"><i class="far fa-check-circle"></i></div>
+                <div class="alert-text">
+                    @Localizer["TicketFinished"]
+                </div>
+                <div class="alert-close">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><i class="ki ki-close"></i></span>
+                    </button>
+                </div>
+            </div>
+        }
+        @if(!String.IsNullOrEmpty(ViewBag.error_message)) {
+            <div class="alert alert-custom alert-notice @ViewBag.alert_message fade show" role="alert">
+                <div class="alert-icon"><i class="@ViewBag.icon_message"></i></div>
+                <div class="alert-text">
+                    @ViewBag.error_message
+                </div>
+                <div class="alert-close">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><i class="ki ki-close"></i></span>
+                    </button>
+                </div>
+            </div>
+        }
+        @if(!String.IsNullOrEmpty(detil.verification_note) || !String.IsNullOrEmpty(detil.rpa_status_description)) {
+            <div class="alert alert-custom alert-notice alert-default fade show" role="alert">
+                <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                <div class="alert-text">
+                    @(!String.IsNullOrEmpty(detil.verification_note) ? "Note: " + detil.verification_note : null) 
+                    @if(!String.IsNullOrEmpty(detil.verification_note)) {
+                        <br>
+                    }
+                    @(!String.IsNullOrEmpty(detil.rpa_status_description) ? "Note from RPA: " + detil.rpa_status_description : null)
+                </div>
+                <div class="alert-close">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><i class="ki ki-close"></i></span>
+                    </button>
+                </div>
+            </div>
+        }
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["VendorInfo"]</h3>
+                <div class="card-toolbar">
+                    <div class="card-toolbar">
+                        <button type="button" class="btn btn-primary font-weight-bolder ml-3" data-toggle="modal" data-target="#logModal">
+                            <i class="flaticon2-list-2"></i> @Localizer["LogActivity"]
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="30%">@Localizer["VendorCode"]</th>
+                        <td>@detil.vendor_number</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["VendorName"]</th>
+                        <td>@detil.name</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["NPWP"]</th>
+                        <td>@detil.npwp</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["ContactPerson"]</th>
+                        <td>@detil.contact_person</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["RegisteredEmail"]</th>
+                        <td>@detil.email</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["MiroNumber"]</th>
+                        <td>@detil.miro_number</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["PaymentData"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    @if(detil.country_vendor == "ID") {
+                        <tr>
+                            <th width="30%">@Localizer["BankName"]</th>
+                            <td>@(String.IsNullOrEmpty(detil.localidr_bank_name) ? detil.localforex_bank_name : detil.localidr_bank_name)</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">@Localizer["SwiftCode"]</th>
+                            <td>@(String.IsNullOrEmpty(detil.localidr_swift_code) ? detil.localforex_swift_code : detil.localidr_swift_code)</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">@Localizer["BeneficiaryName"]</th>
+                            <td>@(String.IsNullOrEmpty(detil.localidr_account_holder) ? detil.localforex_account_holder : detil.localidr_account_holder)</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">@Localizer["BankAccNum"]</th>
+                            <td>@(String.IsNullOrEmpty(detil.localidr_bank_account.ToString()) ? detil.localforex_bank_account.ToString() : detil.localidr_bank_account.ToString())</td>
+                        </tr>
+                    } else {
+                        <tr>
+                            <th width="30%">@Localizer["BankName"]</th>
+                            <td>@detil.foreign_bank_name</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">@Localizer["BeneficiaryName"]</th>
+                            <td>@detil.foreign_account_holder</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">@Localizer["BankAccNum"]</th>
+                            <td>@detil.foreign_bank_account.ToString()</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["MailingData"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="30%">@Localizer["Country"]</th>
+                        <td>@detil.country_id</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["MailingAddress"]</th>
+                        <td>@detil.mailing_address</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["Province"]</th>
+                        <td>@detil.province</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["Village"]</th>
+                        <td>@detil.village</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["District"]</th>
+                        <td>@detil.district</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["PhoneNumber"]</th>
+                        <td>@detil.phone_number</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["IndessoData"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="30%">@Localizer["Company"]</th>
+                        <td>@detil.company_name</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["Area"]</th>
+                        <td>@detil.location_name</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["EstimatedPayment"]</th>
+                        <td class="estimated_payment"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["TaxData"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="30%">@Localizer["TaxStatus"]</th>
+                        <td>@detil.tax_status_name</td>
+                    </tr>
+                    @if(detil.tax_status_id == 1) {
+                        <tr>
+                            <th width="30%">@Localizer["TaxInvoiceNumber"]</th>
+                            <td>@detil.tax_invoice_number</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">@Localizer["TaxInvoiceDate"]</th>
+                            <td>@detil.tax_invoice_date.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        @if(ViewBag.role_id == "6") {
+            <div class="card card-custom mt-5 mb-5">
+                <div class="card-header">
+                    <h3 class="card-title">@Localizer["Wht"]</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="30%">@Localizer["NameWht"]</th>
+                            <td>@detil.tax_type_name</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">@Localizer["WhtCode"]</th>
+                            <td>@detil.sap_code</td>
+                        </tr>
+                        <tr id="wht_base">
+                            <th width="30%">@Localizer["WhtBase"]</th>
+                            <td class="wht_base">@detil.pph</td>
+                        </tr>
+                        <tr id="tax_amt_fc">
+                            <th width="30%">@Localizer["WhtAmount"]</th>
+                            <td class="tax_amt_fc">@detil.tax_amt_fc</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["InvoiceData"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th width="30%">@Localizer["InvoiceNumber"]</th>
+                        <td>@detil.invoice_number</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["InvoiceDate"]</th>
+                        <td>@detil.invoice_date.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["POType"]</th>
+                        <td>@detil.po_type_name</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["PONumber"]</th>
+                        <td>@detil.po_number</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["GRNumber"]</th>
+                        <td>@detil.gr_number</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["Currency"]</th>
+                        <td>@detil.invoice_currency</td>
+                    </tr>
+                    <tr>
+                        <th width="30%">@Localizer["InvoiceAmount"]</th>
+                        <td>@detil.invoice_currency @detil.invoice_amount</td>
+                    </tr>
+                    <table class="table table-bordered" id="po_table">
+                        <thead class="text-center align-middle">
+                            <tr>
+                                <th>Item</th>
+                                <th>GL Desc</th>
+                                <th>QTY GR</th>
+                                <th>QTY Billed</th>
+                                <th>UoM</th>
+                                <th>Currency</th>
+                                <th>Amount GR</th>
+                                <th>Amount To Be Inv</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(table_po.Count != 0) {
+                                foreach (var item in detil.table_po)
+                                {
+                                    <tr class="po_row">
+                                        <td>@item.po_name</td>
+                                        <td>@(item.gl_description == null ?  "-" : item.gl_description)</td>
+                                        <td class="gr_qty">@item.gr_qty</td>
+                                        <td class="qty_billed">@item.qty_billed</td>
+                                        <td>@item.uom</td>
+                                        <td>@item.currency</td>
+                                        <td class="text-right gr_amount">@item.gr_amount</td>
+                                        <td class="text-right amount_invoice">@item.amount_invoice</td>
+                                        <td class="text-right amount_total">@item.amount_total</td>
+                                    </tr>                                    
+                                }
+                            } else {
+                                <tr>
+                                    <td colspan="8" class="text-center">@Localizer["NoData"]</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="8" class="text-right font-weight-bold">Total</td>
+                                <td class="text-right total_price">@detil.total_price</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="text-right font-weight-bold">DPP</td>
+                                <td class="text-right dpp">@detil.dpp</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="text-right font-weight-bold">PPN</td>
+                                <td class="text-right ppn">@detil.ppn</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="text-right font-weight-bold">PPH</td>
+                                <td class="text-right pph">@detil.pph</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" class="text-right font-weight-bold">DPP + PPN</td>
+                                <td class="text-right dpp_ppn">@dpp_ppn</td>
+                            </tr>
+                        </tbody>
+                    </table>                                    
+                </table>
+            </div>
+        </div>
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">@Localizer["Upload"]</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>@Localizer["Invoice"]</th>
+                        <th>PO</th>
+                        <th>@Localizer["GR"]</th>
+                        <th>@Localizer["TaxInvoice"]</th>
+                        <th>@Localizer["DeliveryNote"]</th>
+                        <th>BAST</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @if (detil.file_invoice != null && detil.file_invoice.Length != 0)
+                            {
+                            <a href="@ViewBag.BaseUrl/@detil.file_invoice" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                            }
+                            else
+                            {
+                                <span>@Localizer["NotFile"]</span>
+                            }
+                        </td>
+                        <td>
+                            @if (detil.file_po != null && detil.file_po.Length != 0)
+                            {
+                            <a href="@ViewBag.BaseUrl/@detil.file_po" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                            }
+                            else
+                            {
+                                <span>@Localizer["NotFile"]</span>
+                            }
+                        </td>
+                        <td>
+                            @if (detil.file_lpb_gr != null && detil.file_lpb_gr.Length != 0)
+                            {
+                            <a href="@ViewBag.BaseUrl/@detil.file_lpb_gr" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                            }
+                            else
+                            {
+                                <span>@Localizer["NotFile"]</span>
+                            }
+                        </td>
+                        <td>
+                            @if (detil.file_tax_invoice != null && detil.file_tax_invoice.Length != 0)
+                            {
+                            <a href="@ViewBag.BaseUrl/@detil.file_tax_invoice" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                            }
+                            else
+                            {
+                                <span>@Localizer["NotFile"]</span>
+                            }
+                        </td>
+                        <td>
+                            @if (detil.file_delivery_note != null && detil.file_delivery_note.Length != 0)
+                            {
+                            <a href="@ViewBag.BaseUrl/@detil.file_delivery_note" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                            }
+                            else
+                            {
+                                <span>@Localizer["NotFile"]</span>
+                            }
+                        </td>
+                        <td>
+                            @if (detil.file_bast != null && detil.file_bast.Length != 0)
+                            {
+                            <a href="@ViewBag.BaseUrl/@detil.file_bast" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                            }
+                            else
+                            {
+                                <span>@Localizer["NotFile"]</span>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="card card-custom mt-5 mb-5">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <div class="card-label">@Localizer["Barcode"]</div>
+                    <small>@Localizer["BarcodeNote"]</small>
+                </h3>
+            </div>
+            <div class="card-body" id="barcode">
+                <table class="table table-borderless">
+                    <tr>
+                        <td width="40%" style="border-style: dashed; border-width: 3px" class="ml-5 p-3">
+                            <h4 class="text-uppercase">Ticket Number</h4>
+                            <h4 class="text-uppercase">@detil.ticket_number</h4>
+                            <img src="@barcode" class="text-center mx-auto d-block" width="50%">
+                            <hr>
+                            <p>@detil.name</p>
+                            <p>@detil.mailing_address</p>
+                            <p>@detil.province</p>
+                            <p class="text-left">
+                                @detil.phone_number
+                                <span style="float: right;">@Localizer["BarcodeEnvelope"]</span>
+                            </p>
+                        </td>
+                        <td width="40%" style="border-style: dashed; border-width: 3px" class="p-3">
+                            <h4 class="text-uppercase">Ticket Number</h4>
+                            <h4 class="text-uppercase">@detil.ticket_number</h4>
+                            <img src="@barcode" class="text-center mx-auto d-block" width="50%">
+                            <hr>
+                            <p>@detil.name</p>
+                            <p>@detil.mailing_address</p>
+                            <p>@detil.province</p>
+                            <p class="text-left">
+                                @detil.phone_number
+                                <span style="float: right;">@Localizer["BarcodeInvoice"]</span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        @if(ViewBag.role_id == "3" && detil.position_data.ToString() == ViewBag.role_id) {
+                            <form class="form" method="POST" asp-controller="Ticket" enctype="multipart/form-data">
+                                <input type="hidden" name="ticket_number" value="@detil.ticket_number">
+                                <button type="submit" asp-action="Approve" class="btn btn-success mr-2">Agree To Proceed</button>
+                                <button type="submit" asp-action="Reject" class="btn btn-danger mr-2">Reject</button>
+                                <a asp-action="Index"><button type="button" class="btn btn-secondary">@Localizer["Close"]</button></a>
+                            </form>
+                        } else if(!String.IsNullOrEmpty(detil.miro_number) && ViewBag.role_id == "8") {
+                            <button type="button" data-toggle="modal" data-target="#rejectReason" class="btn btn-danger mr-2">Reject</button>
+                            <a asp-action="Index"><button type="button" class="btn btn-secondary">@Localizer["Close"]</button></a>
+                        } else {
+                            <a asp-action="PrintBarcode" asp-route-ticket_number="@detil.ticket_number" target="_blank">
+                                <button type="button" class="btn btn-primary mr-2">
+                                    @Localizer["Print"]
+                                </button>
+                            </a>
+                            <a asp-action="Index"><button type="button" class="btn btn-secondary">@Localizer["Close"]</button></a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->
+@if(ViewBag.role_id == "6") {
+    <div class="modal fade" id="simulateResult" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@Localizer["SimulationResult"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body" style="min-height: 500px;">
+                    <table class="table table-bordered table-responsive">
+                    <tr>
+                        <th>Position</th>
+                        <th>Account</th>
+                        <th>G/L</th>
+                        <th>Act/Mat/Ast/Vndr</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Purchasing</th>
+                        <th>Item</th>
+                        <th>Tax Code</th>
+                        <th>Jurisd. Code</th>
+                        <th>Tax Date</th>
+                        <th>Bus. Area</th>
+                        <th>Cost Center</th>
+                        <th>CO Area</th>
+                        <th>Order</th>
+                        <th>Asset</th>
+                        <th>Sub Number</th>
+                        <th>Asset Valuate</th>
+                        <th>Material</th>
+                        <th>Quantity</th>
+                        <th>Base Unit</th>
+                        <th>Plant</th>
+                        <th>PartBusAr</th>
+                        <th>Cost Object</th>
+                        <th>Profit. Segment</th>
+                        <th>Profit Center</th>
+                        <th>Partner PrCtr</th>
+                        <th>WBS Element</th>
+                        <th>Network</th>
+                        <th>Sales Order</th>
+                        <th>SlsOrd. Item</th>
+                        <th>Vendor Number</th>
+                        <th>Posting Key</th>
+                        <th>Pstg Line ID</th>
+                        <th>Created Auto.</th>
+                    </tr>
+                    @if(simulation_result.Count != 0) {
+                        @foreach (var item in simulation_result)
+                        {
+                            <tr>
+                                <td>@item.position</td>
+                                <td>@item.account_type</td>
+                                <td>@item.g_l</td>
+                                <td>@item.act_mat_ast_vndr</td>
+                                <td>@item.amount</td>
+                                <th>@item.currency</th>
+                                <th>@item.po_number</th>
+                                <th>@item.po_item_number</th>
+                                <th>@item.tax_code</th>
+                                <th>@item.jurisd_code</th>
+                                <th>@item.tax_date</th>
+                                <th>@item.bus_area</th>
+                                <th>@item.cost_center</th>
+                                <th>@item.co_area</th>
+                                <th>@item.order_1</th>
+                                <th>@item.asset</th>
+                                <th>@item.sub_number</th>
+                                <th>@item.asset_val</th>
+                                <th>@item.material</th>
+                                <th>@item.quantity</th>
+                                <th>@item.base_unit</th>
+                                <th>@item.plant</th>
+                                <th>@item.part_bus_ar</th>
+                                <th>@item.cost_object</th>
+                                <th>@item.profit_segment</th>
+                                <th>@item.profit_center</th>
+                                <th>@item.partner_prctr</th>
+                                <th>@item.wbs_element</th>
+                                <th>@item.network</th>
+                                <th>@item.sales_order</th>
+                                <th>@item.sls_item</th>
+                                <th>@item.vendor_number</th>
+                                <th>@item.posting_key</th>
+                                <th>@item.posting_line_id</th>
+                                <th>@item.created_auto</th>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td>1</td>
+                            <td>K</td>
+                            <td>21111000</td>
+                            <td>TRIA MANGGALA, CV TRIA MANGGALA</td>
+                            <td>2.940.000</td>
+                            <td>IDR</td>
+                            <td></td>
+                            <td></td>
+                            <td>**</td>
+                            <td></td>
+                            <td></td>
+                            <td>2200</td>
+                            <td></td>
+                            <td>8000</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>13700008</td>
+                            <td>5.000,00</td>
+                            <td>PC</td>
+                            <td>2200</td>
+                            <td></td>
+                            <td></td>
+                            <td>0</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>0</td>
+                            <td></td>
+                            <td>36</td>
+                            <td></td>
+                            <td>checked</td>
+                        </tr>
+                    }
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">@Localizer["Close"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if(ViewBag.role_id == "8") {
+    <div class="modal fade" id="rejectReason" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@Localizer["RejectReason"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body" style="height: 200px;">
+                    <form method="POST" class="form" asp-controller="Ticket" asp-action="Reject">
+                        <input type="hidden" class="form-control" name="ticket_number" value="@detil.ticket_number" />
+                        <label for="">@Localizer["RejectReason"]</label>
+                        <br>
+                        <textarea class="form-control" name="verification_note" id="reject_reason" cols="30" rows="10"></textarea>
+                        <br><br>
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">@Localizer["Close"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@Localizer["LogActivity"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 400px;">
+                <div class="timeline timeline-2 mt-3 mb-3 ml-5 mr-3">
+                    <div class="timeline-bar"></div>
+                    @if(log_ticket.Count == 0) {
+                        <div class="timeline-item">
+                            <div class="timeline-badge"><span class="bg-success"></span></div>
+                            <div class="timeline-content">
+                                @Localizer["LogNotAvailable"]
+                            </div>
+                        </div>
+                    } else {
+                        @foreach (var item in log_ticket)
+                        {
+                            <div class="timeline-item">
+                                <div class="timeline-badge"><span class="bg-success"></span></div>
+                                <div class="timeline-content">
+                                    <span class="text-dark-75 font-weight-bold">@item.created_at</span><br/>
+                                    @item.process<br/>
+                                    <p class="p-0" style="font-size: 0.9rem !important">
+                                        <i class="flaticon2-user" style="font-size: 0.9rem !important"></i> @item.created_by_name
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">@Localizer["Close"]</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var role_id = '@ViewBag.role_id';
+    var created_at = '@detil.created_at.ToString("yyyy-MM-dd")';
+    var top_duration = '@detil.top_duration';
+</script>
+
+@section Scripts{
+    <script src="~/js/apps/detil_ticket.js?v=1.0.4"></script>
+}

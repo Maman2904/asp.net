@@ -1,0 +1,425 @@
+@using System.Reflection;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@using Microsoft.Extensions.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer
+@using System.Threading;
+@model List<tufol.Models.MenuModel>;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@{
+    Layout = null;
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "/" : Context.Request.Path.Value;
+    var base_url = Url.Content("~/");
+
+	var url = Context.Request.Path;
+    var last = ViewContext.RouteData.Values["Controller"].ToString();
+    var active = last == "Announcement" ? "menu-item-active" : "";
+    var menu = ViewBag.Menu;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+	<!--begin::Head-->
+	<head>
+		<meta charset="utf-8" />
+		<title>@ViewData["Title"] @Configuration["AppName"]</title>
+		<meta name="description" content="Updates and statistics" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<!--begin::Fonts-->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+		<!--end::Fonts-->
+		<!--begin::Page Vendors Styles(used by this page)-->
+		<link href="~/plugins/custom/fullcalendar/fullcalendar.bundle.css?v=7.0.4" rel="stylesheet" type="text/css" />
+		<!--end::Page Vendors Styles-->
+		<!--begin::Global Theme Styles(used by all pages)-->
+		<link href="~/plugins/global/plugins.bundle.css?v=7.0.4" rel="stylesheet" type="text/css" />
+		<link href="~/plugins/custom/prismjs/prismjs.bundle.css?v=7.0.4" rel="stylesheet" type="text/css" />
+		<link href="~/css/style.bundle.home.min.css?v=7.0.4" rel="stylesheet" type="text/css" />
+		<!--end::Global Theme Styles-->
+		<!--begin::Page Custom Styles(used by this page)-->
+		<link href="~/css/pages/login/login-2.css?v=7.0.4" rel="stylesheet" type="text/css" />
+		<link rel="shortcut icon" href="~/favicon.ico" />
+		<style type="text/css">
+			.header-mobile-fixed .header-mobile a, .brand a {
+				color: #FFFFFF;
+				font-weight: bolder;
+				font-size: 1.5rem;
+			}
+			@* Datatable  *@
+			.datatable.datatable-default > .datatable-table > .datatable-head .datatable-row > .datatable-cell, .datatable.datatable-default > .datatable-table > .datatable-body .datatable-row > .datatable-cell, .datatable.datatable-default > .datatable-table > .datatable-foot .datatable-row > .datatable-cell {
+				vertical-align: top;
+			}
+			.custom-file-label { overflow: hidden; }
+			.editable_row > td, .editable_column { cursor: pointer; }
+			.editable_row > td > input, .editable_row > td > select, .editable_row > td > .select2, .editable_row > td > textarea, 
+			.editable_column > input, .editable_column > select, .editable_column > .select2, .editable_column > textarea { display: none; }
+			.editable_row > td > span, .editable_column > span { display: inline-block; width: 100% }
+			.table-fixed-header { height:500px; overflow:scroll; }
+			.table-fixed-header thead tr:nth-child(1) th{
+				background: white;
+				position: sticky;
+				top: 0;
+				z-index: 10;
+				height: 66px;
+			}
+			.table-fixed-header thead tr:nth-child(2) th{
+				background: white;
+				position: sticky;
+				top: 66px;
+				z-index: 20;
+			}
+			.form-control[readonly], .readonly {
+				background-color: #C4C4C4;
+				pointer-events: none;
+				touch-action: none;
+			}
+			.fixed-live-chat {
+				right: 0;
+				bottom: 0;
+				position: fixed;
+				padding: 80px 20px;
+			}
+			#liveChat {
+				right: 0;
+				bottom: 0;
+				left: unset;
+				margin: 180px 20px;
+				width: 20%;
+				height: 50%;
+			}
+			.input-dropdown {
+				background-color: #F8CBAD;
+				color: black;
+			}
+			.input-mandatory {
+				background-color: #B4C6E7;
+				color: black;
+			}
+			.input-bank {
+				background-color: #FFE699;
+				color: black;
+			}
+			.input-additional {
+				background-color: #C9C9C9;
+				color: black;
+			}
+			::placeholder { 
+				color: black;
+				opacity: 1; 
+			}
+			@* .form-control::placeholder {
+				color: white;
+				opacity: 1;
+			} *@
+		</style>
+	</head>
+	<!--end::Head-->
+	<!--begin::Body-->
+	<body id="kt_body" style="background-color:#00C4B3;background-position:right top;background-size: 55% auto;background-image: url(/media/images/icon-invoicing.png);background-position-x: 63rem;background-position-y: 2rem;" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled">
+
+    <!--begin::Main-->
+		<!--begin::Header Mobile-->
+		<div id="kt_header_mobile" class="header-mobile">
+			<!--begin::Logo-->
+			<a href="index.html">
+				<img alt="Logo" src="~/media/images/logo-indesso-white.png" class="logo-default md-max-h-60px mt-1 ml-3 max-h-45px">
+			</a>
+			<!--end::Logo-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn p-0 burger-icon burger-icon-left ml-4" id="kt_header_mobile_toggle">
+					<span></span>
+				</button>
+				<button class="btn btn-icon btn-hover-transparent-white p-0 ml-3" id="kt_header_mobile_topbar_toggle">
+					<span class="svg-icon svg-icon-xl">
+						<!--begin::Svg Icon | path:assets/media/svg/icons/General/User.svg-->
+						<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+							<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<polygon points="0 0 24 0 24 24 0 24"></polygon>
+								<path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+								<path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" fill="#000000" fill-rule="nonzero"></path>
+							</g>
+						</svg>
+						<!--end::Svg Icon-->
+					</span>
+				<!-- </button> -->
+			</button></div>
+			<!--end::Toolbar-->
+		</div>
+		<!--end::Header Mobile-->
+		<div class="d-flex flex-column flex-root">
+			<!--begin::Page-->
+			<div class="d-flex flex-row flex-column-fluid page">
+				<!--begin::Wrapper-->
+				<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+					<!--begin::Header-->
+					<div id="kt_header" class="header header-fixed">
+						<!--begin::Container-->
+						<div class="container d-flex align-items-stretch justify-content-between">
+							<!--begin::Left-->
+							<div class="d-flex align-items-stretch mr-3">
+								<!--begin::Header Logo-->
+								<div class="header-logo">
+									<a href="/">
+										<img alt="Logo" src="~/media/images/logo-indesso-white.png" class="logo-default max-h-60px mt-1 ml-3" />
+									</a>
+								</div>
+								<!--end::Header Logo-->
+								<!--begin::Header Menu Wrapper-->
+								<div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+									<!--begin::Header Menu-->
+									<div id="kt_header_menu" class="header-menu header-menu-left header-menu-mobile header-menu-layout-default">
+										<!--begin::Header Nav-->
+										<ul class="menu-nav">
+											<li class='@("menu-item menu-item-open parent-menu " + (last == "Dashboard" || ViewBag.controller == "Home" ? "menu-item-active" : null))'>
+												<a href='~/@culture@(ViewBag.controller == "Home" ? null : "/dashboard")' class="menu-link">
+													<span class="menu-text">Dashboard</span>
+													<i class="menu-arrow"></i>
+												</a>
+											</li>
+											@if(menu != null && Enumerable.Count(menu) > 1){
+												@foreach (var item in menu)
+												{
+													if(Enumerable.Count(item.childs) > 0)
+													{
+														<li class="menu-item menu-item-open menu-item-submenu menu-item-rel menu-item-open" data-menu-toggle="click" aria-haspopup="true">
+															<a href="javascript:;" class="menu-link menu-toggle">
+																<span class="menu-text parent-menu">@item.label</span>
+																<i class="menu-arrow"></i>
+															</a>
+															<div class="menu-submenu menu-submenu-classic menu-submenu-left">
+																<ul class="menu-subnav">
+																	@foreach (var sub_menu in item.childs)
+																	{
+																		@* menu-item-active *@
+																		<li class="menu-item" aria-haspopup="true">
+																			<a href="~/@culture/@sub_menu.endpoint" class="menu-link">
+																				<span class="menu-text">@sub_menu.label</span>
+																			</a>
+																		</li>
+																	}
+																</ul>
+															</div>
+														</li>
+													}
+												}
+
+												@foreach (var item in menu)
+												{
+													if(Enumerable.Count(item.childs) == 0)
+													{
+														<li class='@("menu-item " + (last == item.endpoint ? "menu-item-here" : ""))'>
+															<a href="~/@culture/@item.endpoint" class="menu-link parent-menu">
+																<span class="menu-text">@item.label</span>
+																<i class="menu-arrow"></i>
+															</a>
+														</li>
+													}
+												}
+											}
+										</ul>
+										<!--end::Header Nav-->
+									</div>
+									<!--end::Header Menu-->
+								</div>
+								<!--end::Header Menu Wrapper-->
+							</div>
+							<!--end::Left-->
+							<div class="topbar">
+								<!--begin::Languages-->
+								<div class="dropdown">
+									<!--begin::Toggle-->
+									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
+										<div class="btn btn-icon btn-hover-transparent-white btn-dropdown btn-lg mr-1">
+											<img class="h-20px w-20px rounded-sm" src="~/media/svg/flags/004-indonesia.svg" alt="flag" id="language"/>
+										</div>
+									</div>
+									<!--end::Toggle-->
+									<!--begin::Dropdown-->
+									<div class="dropdown-menu p-0 m-0 dropdown-menu-anim-up dropdown-menu-sm dropdown-menu-right">
+										<!--begin::Nav-->
+										<ul class="navi navi-hover py-4">
+											<!--begin::Item-->
+											<li class="navi-item">
+                                            <a asp-route-culture="en" class="navi-link">
+                                                <span class="symbol symbol-20 mr-3">
+                                                    <img src="~/media/svg/flags/226-united-states.svg" alt="" />
+                                                </span>
+                                                <span class="navi-text">@Localizer["En"]</span>
+                                            </a>
+                                        </li>
+                                        <!--end::Item-->
+                                        <!--begin::Item-->
+                                        <li class="navi-item active">
+                                            <a asp-route-culture="id" class="navi-link">
+                                                <span class="symbol symbol-20 mr-3">
+                                                    <img src="~/media/svg/flags/004-indonesia.svg" alt="" />
+                                                </span>
+                                                <span class="navi-text">@Localizer["Id"]</span>
+                                            </a>
+                                        </li>
+											<!--end::Item-->
+										</ul>
+										<!--end::Nav-->
+									</div>
+									<!--end::Dropdown-->
+								</div>
+								<!--end::Languages-->
+								<!--begin::User-->
+								<div class="dropdown">
+									<!--begin::Toggle-->
+									@if(String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("role_id")))
+									{
+										<div class="topbar-item">
+											<div class="btn btn-icon btn-hover-transparent-white d-flex align-items-center btn-lg px-md-2 w-md-auto">
+												<a asp-controller="Home" asp-action="Login" asp-route-culture="@culture" class="btn btn-primary">LOGIN</a>
+											</div>
+										</div>
+									} else {
+										<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
+											<div class="btn btn-icon btn-hover-transparent-white btn-dropdown btn-lg">
+												<span class="symbol symbol-35 symbol-light-success mr-3 ml-3">
+													<span class="symbol-label font-size-h5 font-weight-bold"><i class="fa fa-user"></i></span>
+												</span>
+											</div>
+										</div>
+										<div class="dropdown-menu p-0 m-0 dropdown-menu-anim-up dropdown-menu-sm dropdown-menu-right">
+											<!--begin::Nav-->
+											<ul class="navi navi-hover py-4">
+												<!--begin::Item-->
+												<li class="navi-item">
+													<span style="padding: .75rem 1.5rem">
+														<span class="navi-text font-weight-bolder">@HttpContextAccessor.HttpContext.Session.GetString("username")</span>
+													</span>
+												</li>
+												<hr>
+												<!--begin::Item-->
+												<li class="navi-item">
+													<a asp-controller="ChangePassword" asp-action="Index" class="navi-link">
+														<span class="navi-text">@Localizer["ChangePass"]</span>
+													</a>
+												</li>
+												<!--end::Item-->
+												<!--begin::Item-->
+												<li class="navi-item active">
+													<a asp-controller="home" asp-action="logout" class="navi-link">
+														<span class="navi-text">Log Out</span>
+													</a>
+												</li>
+												<!--end::Item-->
+											</ul>
+											<!--end::Nav-->
+										</div>
+									}
+									<!--end::Toggle-->
+								</div>
+								<!--end::User-->
+							</div>
+						</div>
+						<!--end::Container-->
+					</div>
+					<!--end::Header-->
+					<!--begin::Content-->
+					<div class="content d-flex flex-column flex-column-fluid pb-0" id="kt_content">
+						@if(ViewBag.controller == "Home") {
+							@RenderBody()
+						} else {
+							<div class="container min-vh-100">
+								@RenderBody()
+							</div>
+						}
+						<!-- End Flow -->
+					</div>
+					<!--end::Content-->
+					<!--begin::Footer-->
+					<div class="footer bg-white py-4 d-flex flex-lg-column" id="kt_footer">
+						<!--begin::Container-->
+						<div class="container d-flex flex-column flex-md-row align-items-center justify-content-between">
+							<!--begin::Copyright-->
+							<div class="text-dark order-2 order-md-1">
+								<span class="text-muted font-weight-bold mr-2">2021©</span>
+								<a href='#' target="_blank" class="text-dark-75 text-hover-primary">Indesso</a>
+							</div>
+							<!--end::Copyright-->
+						</div>
+						<!--end::Container-->
+					</div>
+					<!--end::Footer-->
+				</div>
+				<!--end::Wrapper-->
+			</div>
+			<!--end::Page-->
+		</div>
+		<!--end::Main-->
+		<script>var HOST_URL = "https://keenthemes.com/metronic/tools/preview";</script>
+		<!--begin::Global Config(global config for global JS scripts)-->
+		<script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1200 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#6993FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#F3F6F9", "dark": "#212121" }, "light": { "white": "#ffffff", "primary": "#E1E9FF", "secondary": "#ECF0F3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#212121", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#ECF0F3", "gray-300": "#E5EAEE", "gray-400": "#D6D6E0", "gray-500": "#B5B5C3", "gray-600": "#80808F", "gray-700": "#464E5F", "gray-800": "#1B283F", "gray-900": "#212121" } }, "font-family": "Poppins" };</script>
+		<!--end::Global Config-->
+		<!--begin::Global Theme Bundle(used by all pages)-->
+		<script src="~/plugins/global/plugins.bundle.js?v=7.0.4"></script>
+		@* <script src="~/plugins/for_public/global/plugins.bundle.js?v=7.0.4"></script> *@
+		<script src="~/plugins/custom/prismjs/prismjs.bundle.js?v=7.0.4"></script>
+		@* <script src="~/plugins/for_public/custom/prismjs/prismjs.bundle.js?v=7.0.4"></script> *@
+		<script src="~/js/scripts.bundle.js?v=7.0.4"></script>
+		@* <script src="~/js/for_public/scripts.bundle.js?v=7.0.4"></script> *@
+		<!--end::Global Theme Bundle-->
+		<!--begin::Page Vendors(used by this page)-->
+		<script src="~/plugins/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.4"></script>
+		@* <script src="~/plugins/for_public/custom/fullcalendar/fullcalendar.bundle.js?v=7.0.4"></script> *@
+		<!--end::Page Vendors-->
+		<script src="~/js/pages/custom/login/login-general.js?v=7.0.5"></script>
+		@* <script src="~/js/for_public/pages/custom/login/login-general.js?v=7.0.5"></script> *@
+		<!--begin::Page Scripts(used by this page)-->
+		<script src="~/js/pages/widgets.js?v=7.0.4"></script>
+		@* <script src="~/js/for_public/pages/widgets.js?v=7.0.4"></script> *@
+		<!--end::Page Scripts-->
+<script type="text/javascript">var lang = '@culture';  var base_url = '@base_url';</script>
+    @RenderSection("Scripts", required: false)
+    <script type="text/javascript">
+		let error = "@ViewBag.error"
+		if (error) {
+			swal.fire({
+				text: error,
+				icon: "error",
+				buttonsStyling: false,
+				confirmButtonText: "Ok!",
+				customClass: {
+					confirmButton: "btn font-weight-bold btn-light-primary"
+				}
+			}).then(function() {
+			KTUtil.scrollTop();
+			});
+		}
+
+		let success = "@ViewBag.registration_success"
+		if (success) {
+			swal.fire({
+				text: success,
+				icon: "success",
+				buttonsStyling: false,
+				confirmButtonText: "Ok!",
+				customClass: {
+					confirmButton: "btn font-weight-bold btn-light-primary"
+				}
+			}).then(function() {
+			KTUtil.scrollTop();
+			});
+		}
+
+		var first = $(location).attr('pathname');
+		first.indexOf(1);
+		first.toLowerCase();
+		first = first.split("/")[1];
+		var edit_save = document.getElementById("language");
+		if(first == "en")
+			edit_save.src = "/media/svg/flags/226-united-states.svg";
+		else
+			edit_save.src = "/media/svg/flags/004-indonesia.svg";
+    </script>
+	</body>
+	<!--end::Body-->
+</html>

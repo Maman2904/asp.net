@@ -1,0 +1,78 @@
+@model tufol.Models.BankModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+@using Microsoft.SqlServer.Management.Sdk.Sfc;
+
+@inject IViewLocalizer Localizer;
+@{
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var data = ViewBag.DataBank;
+    var bank_id = data.bank_id != null ? data.bank_id : null;
+    var message = ViewBag.message;
+    var icon = ViewBag.icon;
+}
+<!--begin::Main Content-->
+
+<div class="card-body">
+        <table class="table table-borderless"> 
+            <tr>
+                <th width="30%">@Localizer["BankId"]</th>
+                <td>
+                    <div class="input-group">
+                        @if(!string.IsNullOrEmpty(ViewBag.controller)){
+                        <input type="text" class="form-control" placeholder='@Localizer["PlaceholderBankId"]' asp-for="bank_id" name="bank_id" id="bank_id" maxlength="30" value="@data.bank_id" readonly />
+                        } else {
+                        <input type="text" class="form-control" placeholder='@Localizer["PlaceholderBankId"]' asp-for="bank_id" name="bank_id" id="bank_id" maxlength="30" value="@data.bank_id" />
+                        }
+                    </div>
+                    <span class="text-danger" asp-validation-for="bank_id"></span>
+                </td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Name"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder='@Localizer["PlaceholderName"]' asp-for="name" name="name" maxlength="100" value="@data.name" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="name"></span>
+                </td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Country"]</th>
+                <td>
+                    <div class="input-group">
+                        <select class="form-control selectpicker" asp-for="country_of_origin" name="country_of_origin" id="country_of_origin">
+                        </select>
+                        <input type="hidden" id="hidden_country_of_origin" value="@data.country_of_origin">
+                    </div>
+                    <span class="text-danger" asp-validation-for="country_of_origin"></span>
+                </td>
+            </tr>
+           <tr>
+                <th width="30%">@Localizer["SwiftCode"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder='@Localizer["PlaceholderSwiftCode"]' asp-for="swift_code" name="swift_code" maxlength="15" value="@data.swift_code" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="swift_code"></span>
+                </td>
+            </tr>
+        </table>
+</div>
+<div class="card-footer text-center">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <button type="submit" class="btn btn-primary mr-2">@Localizer["Save"]</button>
+            <a href='@ViewData["returnUrl"]'><button type="button" class="btn btn-secondary">@Localizer["Back"]</button></a>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/apps/form_bank.js?v=1.0.0"></script>
+}

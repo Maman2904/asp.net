@@ -1,0 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    Layout = null;
+    ViewData["Title"] = @Localizer["Title"];
+}
+<!--begin::Main Content-->
+<partial name="_PrintBarcode" view-data="ViewData">
+<!--end::Main Content-->

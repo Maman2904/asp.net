@@ -1,0 +1,151 @@
+@model tufol.Models.UserIndessoModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+@using Microsoft.SqlServer.Management.Sdk.Sfc;
+
+@inject IViewLocalizer Localizer;
+@{
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var data = ViewBag.DataUser;
+    var company_area = ViewBag.CompanyArea;
+    var user_area = data.user_area == null ? new List<UserAreaModel>() : data.user_area;
+    var user_id = data.user_id != null ? data.user_id : null;
+}
+<!--begin::Main Content-->
+
+<div class="card-body">
+    <table class="table table-borderless">
+        <tr>
+            <th width="30%"><label>@Localizer["Role"]</label></th>
+            <td>
+                <select class="form-control selectpicker" asp-for="role_id" name="role_id" id="role_id_0">
+                </select>
+                <input type="hidden" id="hidden_role" value="@data.role_id">
+            </td>
+        </tr>
+        <tr>
+            <th width="30%">@Localizer["Name"]</th>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder='@Localizer["Name"]' asp-for="name" name="name"
+                        maxlength="256" value="@data.name" />
+                </div>
+                <span class="text-danger" asp-validation-for="name"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="30%">@Localizer["Username"]</th>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder='@Localizer["Username"]' asp-for="username"
+                        name="username" maxlength="256" value="@data.username" />
+                </div>
+                <span class="text-danger" asp-validation-for="username"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="30%">@Localizer["ProcurementGroup"]</th>
+            <td>
+                <div class="input-group">
+                    <select class="form-control selectpicker" asp-for="initial_area" name="initial_area"
+                        id="initial_area">
+                    </select>
+                    <input type="hidden" id="hidden_initial_area" value="@data.initial_area">
+                </div>
+                <span class="text-danger" asp-validation-for="initial_area"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="30%">@Localizer["CompanyArea"]</th>
+            <td>
+                <div class="col-12 col-form-label">
+                    <select class="form-control select2" id="kt_select2_company_area" name="company_area[]"
+                        multiple="multiple" data-placeholder='@Localizer["CompanyAreaChoose"]'>
+                        @if (company_area.Count != 0)
+                        {
+                            @foreach (var area in company_area)
+                            {
+                                bool is_selected = false;
+                                @if (user_area.Count != 0)
+                                {
+                                    @foreach (var item in user_area)
+                                    {
+                                        @if (item.code == area.code)
+                                        {
+                                            is_selected = true;
+                                        }
+                                    }
+                                }
+                                if (is_selected)
+                                {
+                                    <option value="@area.code" selected>@area.company_area_name</option>
+                                }
+                                else
+                                {
+                                    <option value="@area.code">@area.company_area_name</option>
+                                }
+
+                            }
+                        }
+                    </select>
+                </div>
+                <input type="hidden" asp-for="area_code" name="area_code" id="hidden-company_area">
+            </td>
+        </tr>
+        @if (ViewBag.action == "Add")
+        {
+            <tr>
+                <th width="30%">@Localizer["Password"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="password" class="form-control" placeholder='@Localizer["Password"]' asp-for="password"
+                        name="password" maxlength="256" value="@data.password" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="password"></span>
+                    @if (!string.IsNullOrEmpty(ViewBag.Valid)){
+                       <span class="text-danger">@ViewBag.Valid</span> 
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["RepeatPassword"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="password" class="form-control" placeholder='@Localizer["RepeatPassword"]'
+                        asp-for="repeat_password" name="repeat_password" maxlength="256" value="@data.password" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="password"></span>
+                </td>
+            </tr>
+        }
+        <tr>
+            <th width="30%">@Localizer["Email"]</th>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder='@Localizer["Email"]' asp-for="email"
+                        name="email" maxlength="256" value="@data.email" />
+                </div>
+                <span class="text-danger" asp-validation-for="email"></span>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="card-footer text-center">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <input type="hidden" id="user_id" value="@user_id" asp-for="user_id">
+            <button type="submit" class="btn btn-primary mr-2">@Localizer["Save"]</button>
+            <a href='@ViewData["returnUrl"]'><button type="button"
+                    class="btn btn-secondary">@Localizer["Back"]</button></a>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->
+
+@section Scripts{
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/apps/form_user.js?v=1.1.0"></script>
+}

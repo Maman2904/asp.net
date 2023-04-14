@@ -1,0 +1,75 @@
+@model tufol.Models.AnnouncementModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+@using Microsoft.SqlServer.Management.Sdk.Sfc;
+
+@inject IViewLocalizer Localizer;
+@{
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var data = ViewBag.DataAnnouncement;
+    var key_flag = data.key_flag;
+    var title = data.title;
+    ViewData["Title"] = "Edit Announcement";
+}
+<div>
+<form class="form" method="POST" asp-controller="Announcement" asp-action="EditAnnouncement" enctype="multipart/form-data">
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@key_flag</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-xl-3 col-lg-3 col-form-label text-alert">@Localizer["Judul"]</label>
+            <div class="col-lg-9 col-xl-9">
+                @if(culture == "id") {
+                    <input type="title" class="form-control form-control-lg form-control-solid" value="@data.title" placeholder='@Localizer["Judul"]' asp-for="title" />
+                } else {
+                    <input type="title" class="form-control form-control-lg form-control-solid" value="@data.title_en" placeholder="Type" asp-for="title_en" />
+                }
+            </div>
+            @if(culture == "id") {
+                <span class="text-danger" asp-validation-for="title"></span>
+            } else {
+                <span class="text-danger" asp-validation-for="title_en"></span>
+            }
+        </div>
+        <div class="form-group row">
+            <label class="col-xl-3 col-lg-3 col-form-label text-alert">@Localizer["Isi"]</label>
+            <div class="col-lg-9 col-xl-9">
+                @if(culture == "id") {
+                    <textarea name="content" class="summernote" 
+                    name="@Html.NameFor(m => m.content)"
+                    >@data.content</textarea>
+                } else {
+                    <textarea name="content_en" class="summernote" 
+                    name="@Html.NameFor(m => m.content_en)"
+                    >@data.content_en</textarea>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="card-header py-3">
+            <div class="card-toolbar">
+                <input type="hidden" id="key_flag" value="@key_flag" asp-for="key_flag">
+                <button type="submit" class="btn btn-success mr-2">Save Changes</button>
+                <a href='@ViewData["returnUrl"]'><button type="button" class="btn btn-secondary">@Localizer["Back"]</button></a>
+            </div>
+        </div>
+    </form>
+    <!--end::Form-->
+</div>
+<!--end::Content-->
+
+@* begin::Main Content *@
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.summernote').summernote();
+            });
+    </script>
+}

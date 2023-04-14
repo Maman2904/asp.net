@@ -1,0 +1,113 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+}
+
+@* begin::Main Content *@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-custom">
+            <div class="card-header card-header-tabs-line">
+                <div class="card-toolbar">
+                <ul class="nav nav-tabs nav-bold nav-tabs-line">
+                    <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#pending">
+                        <span class="nav-icon"><i class="flaticon2-hourglass-1"></i></span>
+                        <span class="nav-text">@Localizer["Pending"]</span>
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#request">
+                        <span class="nav-icon"><i class="flaticon-time"></i></span>
+                        <span class="nav-text">@Localizer["DataChangeRequest"]</span>
+                    </a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#active" onclick="KTDatatableAjaxTable.loadActiveDatatable()">
+                        <span class="nav-icon"><i class="flaticon2-check-mark"></i></span>
+                        <span class="nav-text">@Localizer["Active"]</span>
+                    </a>
+                    </li>
+                </ul>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="tab-content">
+                <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending">
+                    <div class="mb-12">
+                        <div class="row align-items-center">
+                            <div class="col-lg-11 col-xl-10 col-md-12">
+                                <div class="row align-items-center">
+                                    <div class="col-md-10 my-2 my-md-0">
+                                        <div class="input-icon">
+                                            <input type="text" class="form-control" placeholder='@Localizer["Search"]...' id="kt_datatable_search_query" />
+                                            <span><i class="flaticon2-search-1 text-muted"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-xl-2 col-md-12 mt-5 mt-lg-0">
+                                        <a href="#" class="btn btn-light-primary px-6 font-weight-bold" id="kt_search_datatable">@Localizer["Search"]</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--begin: Datatable-->
+                    <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_vendor_pending">
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="request" role="tabpanel" aria-labelledby="request">
+                    <div class="mb-12">
+                        <div class="row align-items-center">
+                            <div class="col-lg-11 col-xl-10 col-md-12">
+                                <div class="row align-items-center">
+                                    <div class="col-md-10 my-2 my-md-0">
+                                        <div class="input-icon">
+                                            <input type="text" class="form-control" placeholder='@Localizer["Search"]...' id="kt_datatable_search_query1" />
+                                            <span><i class="flaticon2-search-1 text-muted"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-xl-2 col-md-12 mt-5 mt-lg-0">
+                                        <a href="#" class="btn btn-light-primary px-6 font-weight-bold" id="kt_search_datatable">@Localizer["Search"]</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--begin: Datatable-->
+                    <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_vendor_request">
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="active" role="tabpanel" aria-labelledby="active">
+                    <div class="mb-12">
+                        <div class="row align-items-center">
+                            <div class="col-lg-11 col-xl-10 col-md-12">
+                                <div class="row align-items-center">
+                                    <div class="col-md-10 my-2 my-md-0">
+                                        <div class="input-icon">
+                                            <input type="text" class="form-control" placeholder='@Localizer["Search"]...' id="kt_datatable_search_query2" />
+                                            <span><i class="flaticon2-search-1 text-muted"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1 col-xl-2 col-md-12 mt-5 mt-lg-0">
+                                        <a href="#" class="btn btn-light-primary px-6 font-weight-bold" id="kt_search_datatable">@Localizer["Search"]</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--begin: Datatable-->
+                    <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_vendor_active">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* begin::Main Content *@
+@section Scripts{
+    <script src="~/js/apps/vendor.js?v=1.0.7"></script>
+}

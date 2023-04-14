@@ -1,0 +1,73 @@
+@model tufol.Models.MaterialItemModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+@using Microsoft.SqlServer.Management.Sdk.Sfc;
+
+@inject IViewLocalizer Localizer;
+@{
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var data = ViewBag.DataMaterial;
+    var material_id = data.material_id != null ? data.material_id : null;
+}
+<!--begin::Main Content-->
+
+<div class="card-body">
+    <table class="table table-borderless">
+        <tr>
+            <th width="30%">@Localizer["Material_Id"]</th>
+            <td>
+                <div class="input-group">
+                    @if (!string.IsNullOrEmpty(ViewBag.controller))
+                    {
+                        <input type="text" class="form-control" placeholder='@Localizer["Material_Id"]' asp-for="material_id"
+                        name="material_id" maxlength="15" value="@data.material_id" readonly />
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" placeholder='@Localizer["Material_Id"]' asp-for="material_id"
+                        name="material_id" maxlength="15" value="@data.material_id" />
+                    }
+                </div>
+                <span class="text-danger" asp-validation-for="material_id"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="30%">@Localizer["Material plnt"]</th>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="material_plnt" asp-for="material_plnt"
+                        name="material_plnt" maxlength="4" value="@data.material_plnt" />
+                </div>
+                <span class="text-danger" asp-validation-for="material_plnt"></span>
+            </td>
+        </tr>
+        <tr>
+            <th width="30%">@Localizer["Description"]</th>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder='@Localizer["Description"]' asp-for="description"
+                        name="description" maxlength="200" value="@data.description" />
+                </div>
+                <span class="text-danger" asp-validation-for="description"></span>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="card-footer text-center">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <button type="submit" class="btn btn-primary mr-2">@Localizer["Save"]</button>
+            <a href='@ViewData["returnUrl"]'><button type="button"
+                    class="btn btn-secondary">@Localizer["Back"]</button></a>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->
+
+@section Scripts{
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/apps/form_material.js?v=1.0.0"></script>
+}

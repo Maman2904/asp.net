@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve">
+    <value>Detil Ticket</value>
+    <comment/>
+  </data>
+  <data name="VendorInfo" xml:space="preserve">
+    <value>Informasi Vendor</value>
+    <comment/>
+  </data>
+  <data name="VendorCode" xml:space="preserve">
+    <value>Kode Vendor</value>
+    <comment/>
+  </data>
+  <data name="VendorName" xml:space="preserve">
+    <value>Nama Vendor</value>
+    <comment/>
+  </data>
+  <data name="NPWP" xml:space="preserve">
+    <value>Nomor NPWP</value>
+    <comment/>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Kontak Pribadi</value>
+    <comment/>
+  </data>
+  <data name="RegisteredEmail" xml:space="preserve">
+    <value>Email Teregistrasi</value>
+    <comment/>
+  </data>
+  <data name="PaymentData" xml:space="preserve">
+    <value>Data Pembayaran</value>
+    <comment/>
+  </data>
+  <data name="BankName" xml:space="preserve">
+    <value>Nama Bank</value>
+    <comment/>
+  </data>
+  <data name="SwiftCode" xml:space="preserve">
+    <value>Swift Code</value>
+    <comment/>
+  </data>
+  <data name="BeneficiaryName" xml:space="preserve">
+    <value>Nama Pemilik Rekening</value>
+    <comment/>
+  </data>
+  <data name="BankAccNum" xml:space="preserve">
+    <value>Nomor Rekening</value>
+    <comment/>
+  </data>
+  <data name="MailingData" xml:space="preserve">
+    <value>Data Surat - Menyurat</value>
+    <comment/>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Negara</value>
+    <comment/>
+  </data>
+  <data name="MailingAddress" xml:space="preserve">
+    <value>Alamat Surat Menyurat</value>
+    <comment/>
+  </data>
+  <data name="Province" xml:space="preserve">
+    <value>Provinsi</value>
+    <comment/>
+  </data>
+  <data name="Village" xml:space="preserve">
+    <value>Kecamatan</value>
+    <comment/>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>Kabupaten</value>
+    <comment/>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Nomor Telepon</value>
+    <comment/>
+  </data>
+  <data name="IndessoData" xml:space="preserve">
+    <value>Data Indesso</value>
+    <comment/>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Perusahaan</value>
+    <comment/>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Lokasi</value>
+    <comment/>
+  </data>
+  <data name="TaxData" xml:space="preserve">
+    <value>Data Pajak</value>
+    <comment/>
+  </data>
+  <data name="TaxStatus" xml:space="preserve">
+    <value>Status Pajak</value>
+    <comment/>
+  </data>
+  <data name="TaxInvoiceNumber" xml:space="preserve">
+    <value>Nomor Faktur Pajak</value>
+    <comment/>
+  </data>
+  <data name="TaxInvoiceDate" xml:space="preserve">
+    <value>Tanggal Faktur Pajak</value>
+    <comment/>
+  </data>
+  <data name="Wht" xml:space="preserve">
+    <value>Pemotongan Pajak</value>
+    <comment/>
+  </data>
+  <data name="NameWht" xml:space="preserve">
+    <value>Nama Pemotongan Pajak</value>
+    <comment/>
+  </data>
+  <data name="WhtCode" xml:space="preserve">
+    <value>Kode Pemotongan Pajak</value>
+    <comment/>
+  </data>
+  <data name="WhtBase" xml:space="preserve">
+    <value>Dasar Pemotongan</value>
+    <comment/>
+  </data>
+  <data name="WhtAmount" xml:space="preserve">
+    <value>Jumlah Pemotongan</value>
+    <comment/>
+  </data>
+  <data name="InvoiceData" xml:space="preserve">
+    <value>Data Faktur</value>
+    <comment/>
+  </data>
+  <data name="InvoiceNumber" xml:space="preserve">
+    <value>Nomor Faktur</value>
+    <comment/>
+  </data>
+  <data name="InvoiceDate" xml:space="preserve">
+    <value>Tanggal Faktur</value>
+    <comment/>
+  </data>
+  <data name="POType" xml:space="preserve">
+    <value>Tipe PO</value>
+    <comment/>
+  </data>
+  <data name="PONumber" xml:space="preserve">
+    <value>Nomor PO</value>
+    <comment/>
+  </data>
+  <data name="GRNumber" xml:space="preserve">
+    <value>Nomor GR</value>
+    <comment/>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Mata Uang</value>
+    <comment/>
+  </data>
+  <data name="InvoiceAmount" xml:space="preserve">
+    <value>Nilai Faktur</value>
+    <comment/>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload Dokumen</value>
+    <comment/>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Pajak</value>
+    <comment/>
+  </data>
+  <data name="GR" xml:space="preserve">
+    <value>LPB</value>
+    <comment/>
+  </data>
+  <data name="TaxInvoice" xml:space="preserve">
+    <value>Faktur Pajak</value>
+    <comment/>
+  </data>
+  <data name="DeliveryNote" xml:space="preserve">
+    <value>Surat Jalan</value>
+    <comment/>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Unduh</value>
+    <comment/>
+  </data>
+  <data name="Barcode" xml:space="preserve">
+    <value>Barcode</value>
+    <comment/>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Kembali</value>
+    <comment/>
+  </data>
+  <data name="NotFile" xml:space="preserve">
+    <value>File Tidak Tersedia</value>
+    <comment/>
+  </data>
+  <data name="BarcodeNote" xml:space="preserve">
+    <value>Print Out Ticket TUFOL, wajib ditempelkan di amplop dan 1 copy di dalam invoice</value>
+    <comment/>
+  </data>
+  <data name="BarcodeEnvelope" xml:space="preserve">
+    <value>Tempel di amplop</value>
+    <comment/>
+  </data>
+  <data name="BarcodeInvoice" xml:space="preserve">
+    <value>Tempel di invoice</value>
+    <comment/>
+  </data>
+  <data name="TicketFinished" xml:space="preserve">
+    <value>Tiket Selesai</value>
+    <comment/>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>Tidak ada data</value>
+    <comment/>
+  </data>
+  <data name="RejectReason" xml:space="preserve">
+    <value>Alasan Reject</value>
+    <comment/>
+  </data>
+  <data name="PlaceholderRejectReason" xml:space="preserve">
+    <value>Pilih Alasan Reject</value>
+    <comment/>
+  </data>
+  <data name="EstimatedPayment" xml:space="preserve">
+    <value>Perkiraan Pembayaran</value>
+    <comment/>
+  </data>
+  <data name="LogActivity" xml:space="preserve">
+    <value>Log Proses</value>
+    <comment/>
+  </data>
+  <data name="LogNotAvailable" xml:space="preserve">
+    <value>Proses tidak tersedia</value>
+    <comment/>
+  </data>
+  <data name="SimulationResult" xml:space="preserve">
+    <value>Hasil Simulasi</value>
+    <comment/>
+  </data>
+  <data name="MiroNumber" xml:space="preserve">
+    <value>Nomor MIRO</value>
+    <comment/>
+  </data>
+</root>

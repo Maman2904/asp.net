@@ -1,0 +1,53 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer
+
+@* @{
+    Layout = "_LayoutPublic";
+} *@
+
+<div class="container mt-5">
+    <div class="card card-custom gutter-b">
+        @if(ViewBag.alert == "RegistrationSuccess") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["RegistrationSuccess"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageRegistrationSuccess"] </p>
+        } else if(ViewBag.alert == "InvalidVerifUrl") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["InvalidVerifUrl"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageInvalidVerifUrl"]</p>
+        } else if(ViewBag.alert == "AlreadyVerifEmail") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["AlreadyVerifEmail"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageAlreadyVerifEmail"] </p>
+        } else if(ViewBag.alert == "EmailNotRegistered") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["EmailNotRegistered"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageEmailNotRegistered"] </p>
+        } else if(ViewBag.alert == "VerifEmailFinish") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["VerifEmailFinish"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageVerifEmailFinish"] </p>
+        } else if(ViewBag.alert == "VerifEmailSuccess") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["VerifEmailSuccess"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageVerifEmailSuccess"] </p>
+        } else if(ViewBag.alert == "RevisionSuccess") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["RevisionSuccess"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageRevisionSuccess"] </p>
+        }else if(ViewBag.alert == "ResetPassword") {
+            <h3 class="font-weight-bold mt-8 ml-8">
+                @Localizer["ResetPassword"]
+            </h3>
+            <p class="ml-8">@Localizer["MessageLinkResetPassword"] </p>
+        }
+        <a asp-controller="Home" asp-action=""><button type="button" class="btn btn-secondary m-8 mt-5">@Localizer["Back"]</button></a>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+@model tufol.Models.CompanyModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+
+@inject IViewLocalizer Localizer;
+@{
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var data = ViewBag.DataCompany;
+    var company_id = data.company_id != null ? data.company_id : null; 
+}
+<!--begin::Main Content-->
+
+<div class="card-body">
+        <table class="table table-borderless"> 
+            <tr>
+                <th width="30%">@Localizer["CompanyId"]</th>
+                <td>
+                    <div class="input-group">
+                         @if(!string.IsNullOrEmpty(ViewBag.controller)){
+                        <input type="text" class="form-control" placeholder='@Localizer["PlaceholderCompanyId"]' asp-for="company_id" name="company_id" maxlength="4" value="@data.company_id" readonly />
+                        } else {
+                        <input type="text" class="form-control" placeholder='@Localizer["PlaceholderCompanyId"]' asp-for="company_id" name="company_id" maxlength="4" value="@data.company_id" />
+                        }
+                    </div>
+                    <span class="text-danger" asp-validation-for="company_id"></span>
+                </td>
+            </tr>
+            <tr>
+           <tr>
+                <th width="30%">@Localizer["Name"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder='@Localizer["PlaceholderName"]' asp-for="name" name="name" maxlength="256" value="@data.name" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="name"></span>
+                </td>
+            </tr>
+        </table>
+</div>
+<div class="card-footer text-center">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <button type="submit" class="btn btn-primary mr-2">@Localizer["Save"]</button>
+            <a href='/@culture/TableManagement/CompanyCode'><button type="button" class="btn btn-secondary">@Localizer["Back"]</button></a>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/apps/form_company_code.js?v=1.0.0"></script>
+}

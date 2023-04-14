@@ -1,0 +1,11 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+}
+<!--begin::Main Content-->
+<partial name="_DetilTicket" view-data="ViewData">
+<!--end::Main Content-->
+@section Scripts{
+    <script src="~/js/apps/detil_ticket.js?v=1.0.2"></script>
+}

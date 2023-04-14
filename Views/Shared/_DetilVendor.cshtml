@@ -1,0 +1,362 @@
+@model tufol.Models.RegistrationModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer;
+@{
+    var detil = ViewBag.vendor_data;
+    var company = detil.company;
+    var company_len = company == null ? 0 : company.Count;
+}
+<div class="card card-custom mt-5 mb-5">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["OrgLevel"]</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr>
+                <th width="30%">@Localizer["VendorType"]</th>
+                <td>@detil.vendor_type_name</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["SgCategory"]</th>
+                <td>@detil.sg_category_name</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Currency"]</th>
+                <td>@detil.currency_id</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["PaymentTerm"]</th>
+                <td>@detil.top_name</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["AccGroup"]</th>
+                <td>@detil.vendor_type_code</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["SchemaGroup"]</th>
+                <td>@detil.scheme_group (@detil.scheme_group_name)</td>
+            </tr>
+            <table class="table table-bordered">
+                <tr>
+                    <th>@Localizer["Company"]</th>
+                    <th>@Localizer["PurchOrg"]</th>
+                </tr>
+                @if(company_len != 0) {
+                    @foreach (var item in company)
+                    {
+                        <tr>
+                            <td>@item.name</td>
+                            <td>@item.purchase_organization_name</td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td colspan="2" class="text-center">@Localizer["NoCompany"]</td>
+                    </tr>
+                }
+            </table>
+        </table>
+    </div>
+</div>
+<div class="card card-custom mt-5 mb-5">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["BasicData"]</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr>
+                <th width="30%">@Localizer["TitleDB"]</th>
+                <td>@detil.title_id</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["NameVendor"]</th>
+                <td>@detil.name</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["CP"]</th>
+                <td>@detil.contact_person</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["SearchTerm"]</th>
+                <td>@detil.search_term</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["StreetHouse"]</th>
+                <td>@detil.street_address</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Street4"]</th>
+                <td>@detil.additional_street_address</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["City"]</th>
+                <td>@detil.city</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Postal Code"]</th>
+                <td>@detil.postal_code</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Country"]</th>
+                <td>@detil.country_name</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Tel"]</th>
+                <td>@detil.telephone</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Fax"]</th>
+                <td>@detil.fax</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Email"]</th>
+                <td>@detil.email</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="card card-custom mt-5 mb-5">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["TaxCat"]</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr>
+                <th width="30%">@Localizer["ServiceCat"]</th>
+                <td>@detil.tax_type_name</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["WithholdingType"]</th>
+                <td>@detil.wht_code</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["WithholdingCode"]</th>
+                <td>@detil.tax_rates</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["TaxNumType"]</th>
+                <td>@detil.tax_number_type_name</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["NPWP"]</th>
+                <td>@detil.npwp</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["KTP"]</th>
+                <td>@detil.id_card_number</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["PKP"]</th>
+                <td>@detil.sppkp_number</td>
+            </tr>
+        </table>
+    </div>
+</div>
+@if (!String.IsNullOrEmpty(detil.localidr_bank_id))
+{
+    <div class="card card-custom mt-5 mb-5" id="local_idr">
+        <div class="card-header">
+            <h3 class="card-title">@Localizer["LocalBankAcc"] (IDR)</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless">
+                <tr>
+                    <th width="30%">@Localizer["BankName"]</th>
+                    <td>@detil.localidr_bank_name</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["BankKey"]</th>
+                    <td>@detil.localidr_bank_id</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["SwiftCode"]</th>
+                    <td>@detil.localidr_swift_code</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["BankAcc"]</th>
+                    <td>@detil.localidr_bank_account</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["AccHolder"]</th>
+                    <td>@detil.localidr_account_holder</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+@if (!String.IsNullOrEmpty(detil.localforex_bank_id))
+{
+    <div class="card card-custom mt-5 mb-5" id="local_forex">
+        <div class="card-header">
+            <h3 class="card-title">@Localizer["LocalBankAcc"] (Forex)</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless">
+                <tr>
+                    <th width="30%">@Localizer["BankName"]</th>
+                    <td>@detil.localforex_bank_name</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["BankKey"]</th>
+                    <td>@detil.localforex_bank_id</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["SwiftCode"]</th>
+                    <td>@detil.localforex_swift_code</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["Currency"]</th>
+                    <td>@detil.localforex_currency_id</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["BankAcc"]</th>
+                    <td>@detil.localforex_bank_account</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["AccHolder"]</th>
+                    <td>@detil.localforex_account_holder</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+@if (!String.IsNullOrEmpty(detil.foreign_bank_id))
+{
+    <div class="card card-custom mt-5 mb-5" id="foreign_bank">
+        <div class="card-header">
+            <h3 class="card-title">@Localizer["ForeignBankAcc"] (Forex)</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless">
+                <tr>
+                    <th width="30%">@Localizer["Country"]</th>
+                    <td>@detil.foreign_bank_country_name</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["Currency"]</th>
+                    <td>@detil.foreign_currency_id</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["BankName"]</th>
+                    <td>@detil.foreign_bank_name</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["SwiftCode"]</th>
+                    <td>@detil.foreign_bank_swift_code</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["BankAcc"]</th>
+                    <td>@detil.foreign_bank_account</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["AccHolder"]</th>
+                    <td>@detil.foreign_account_holder</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["ReferenceCorr"]</th>
+                    <td>@detil.reference_correspondent</td>
+                </tr>
+                <tr>
+                    <th width="30%">@Localizer["ReferenceCountry"]</th>
+                    <td>@detil.reference_country_origin</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+<div class="card card-custom mt-5 mb-5">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["AccAssignment"]</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr>
+                <th width="30%">@Localizer["ReconAcc"]</th>
+                <td>@detil.gl (@detil.gl_name)</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["CashManGroup"]</th>
+                <td>@detil.vendor_type_code (@detil.scheme_group_name)</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["PIC"]</th>
+                <td>@detil.pic_id</td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Partner"]</th>
+                <td>@detil.partner_function @detil.partner_function_name</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="card card-custom mt-5 mb-5">
+    <div class="card-header">
+        <h3 class="card-title">@Localizer["Upload"]</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tr>
+                <th>@Localizer["IdCard"]</th>
+                <th>@Localizer["NPWPUpload"]</th>
+                <th>@Localizer["Sppkp"]</th>
+                <th>@Localizer["VendorStatement"]</th>
+            </tr>
+            <tr>
+                <td>
+                    @if (detil.file_id_card != null && detil.file_id_card.Length != 0)
+                    {
+                        <a href="@ViewBag.BaseUrl@detil.file_id_card" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                    }
+                    else
+                    {
+                        <span>@Localizer["NotFile"]</span>
+                    }
+                </td>
+                <td>
+                    @if (detil.file_npwp != null && detil.file_npwp.Length != 0)
+                    {
+                        <a href="@ViewBag.BaseUrl@detil.file_npwp" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                    }
+                    else
+                    {
+                        <span>@Localizer["NotFile"]</span>
+                    }
+                </td>
+                <td>
+                    @if (detil.file_sppkp != null && detil.file_sppkp.Length != 0)
+                    {
+                        <a href="@ViewBag.BaseUrl@detil.file_sppkp" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                    }
+                    else
+                    {
+                        <span>@Localizer["NotFile"]</span>
+                    }
+                </td>
+                <td>
+                    @if (detil.file_vendor_statement != null && detil.file_vendor_statement.Length != 0)
+                    {
+                        <a href="@ViewBag.BaseUrl@detil.file_vendor_statement" download><button class="btn btn-primary"><i class="fa fa-download"></i>@Localizer["Download"]</button></a>
+                    }
+                    else
+                    {
+                        <span>@Localizer["NotFile"]</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+    @if (ViewBag.controller == "VendorManagement")
+    {
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <a asp-action="Index"><button type="button" class="btn btn-secondary">@Localizer["Back"]</button></a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

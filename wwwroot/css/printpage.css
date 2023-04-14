@@ -1,0 +1,84 @@
+@media print{
+	.print_button { display: none }
+	.print_container.a4.landscape {size: A4 landscape; }
+	.print_container.letter.landscape {size: letter landscape; }
+	.print_container.a4.potrait {size: A4 portrait; }
+	.print_container.letter.potrait {size: letter portrait; }
+	.print_container.a4.m-small {
+		padding-top: 20px;
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-bottom: 20px;
+	}
+	.print_container {
+		overflow: hidden;
+	}
+	table {page-break-inside:auto }
+	 tr    { page-break-inside:avoid; page-break-before: avoid; page-break-after:auto }
+	 
+	 thead { display:table-header-group }
+}
+@page {
+	size: A4 landscape;
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+.print_container.a4 {
+	/*width: 29.7cm;*/
+}
+.print_button { margin-bottom: 20px }
+.print_container {
+	font-family: Poppins, Helvetica, "sans-serif";
+	font-size: 12pt;
+}
+.print_container > .header {
+	font-family: Tahoma;
+	font-size: 16pt;
+	font-weight: bold;
+	width: 100%;
+	padding: 2px;
+}
+.print_container > .body {
+	margin-top: 10px;
+}
+.print_container > .body .table {
+	
+}
+.print_container > .body .table > thead > tr > th {
+	padding: 2px;
+}
+.print_container > .body .table > tbody > tr > td {
+	vertical-align: top;
+	padding: 3px 2px;
+}
+.print_container > .body .box {
+	margin-top: 5px;
+	overflow:hidden;
+}
+.print_container > .body > .box > .box-body {
+	padding: 5px;
+}
+.print_container .f-right {
+	float: right;
+}
+.print_container .font-small {
+	font-size: 10pt;
+}
+.print_container .font-bold {
+	font-weight: bold;
+}
+.print_container .align-center {
+	text-align: center;
+}
+.print_container .align-justify {
+	text-align: justify;
+}
+.print_container .align-left {
+	text-align: left;
+}
+.print_container .align-right {
+	text-align: right;
+}
+.page_break { page-break-before: always; }

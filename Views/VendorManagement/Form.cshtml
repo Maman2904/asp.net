@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Edit Vendor Management";
+    var updated_data = ViewBag.updated_data;
+    var dict_field = (Dictionary<string, string>)ViewBag.dict_field;
+    @* var actionName = (String) ViewBag.actionName; *@
+}
+
+@* begin::Main Content *@
+<div class="row">
+    <div class="col-lg-12">
+    
+        @if(updated_data.Count > 0){
+            <div class="card card-custom gutter-b">
+                <div class="card-header">
+                    <h3 class="card-title">Updated Field</h3>
+                </div>
+                    <div class="card-body">
+                    <ul style="
+                                columns: 2;
+                                -webkit-columns: 2;
+                                -moz-columns: 2;
+                            ">
+                        @foreach (var item in updated_data)
+                        {
+                            var keyItem = item.ToString();
+                            var dictFieldMapping = dict_field[keyItem];
+                            <li>@dictFieldMapping</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <form class="form" method="POST" action="" enctype="multipart/form-data">
+            <partial name="_FormVendor" view-data="ViewData">
+        </form>
+    </div>
+</div>
+@* begin::Main Content *@
+@section Scripts{
+    <script src="~/js/apps/form_vendor.js?v=1.4.8"></script>
+}

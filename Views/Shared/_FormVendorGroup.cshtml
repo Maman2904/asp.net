@@ -1,0 +1,84 @@
+@model tufol.Models.VendorTypeModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using System.Threading;
+@using Microsoft.SqlServer.Management.Sdk.Sfc;
+
+@inject IViewLocalizer Localizer;
+@{
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    var data = ViewBag.DataVendorGroup;
+    var vendor_type_id = data.vendor_type_id != null ? data.vendor_type_id : null; 
+}
+<!--begin::Main Content-->
+
+<div class="card-body">
+        <table class="table table-borderless">
+            @if(!string.IsNullOrEmpty(ViewBag.controller)){                      
+            <tr>
+                <th width="30%">@Localizer["Vendor_Type_Id"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Vendor_Type_Id" asp-for="vendor_type_id" name="vendor_type_id" value="@data.vendor_type_id" readonly/>
+                    </div>
+                    <span class="text-danger" asp-validation-for="vendor_type_id"></span>
+                </td>
+            </tr>
+            }
+           <tr>
+                <th width="30%">@Localizer["Name"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Name" asp-for="name" name="name" maxlength="256" value="@data.name" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="name"></span>
+                </td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Sap_Code"]</th>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Sap_Code" asp-for="sap_code" name="sap_code" maxlength="4" value="@data.sap_code" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="sap_code"></span>
+                </td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Scheme_Group_Id"]</th>
+                <td>
+                    <div class="input-group">
+                        <select class="form-control selectpicker" asp-for="scheme_group_id" name="scheme_group_id" id="scheme_group_id">
+                        </select>
+                        <input type="hidden" id="hidden_scheme_group_id" value="@data.scheme_group_id">
+                    </div>
+                    <span class="text-danger" asp-validation-for="scheme_group_id"></span>
+                </td>
+            </tr>
+            <tr>
+                <th width="30%">@Localizer["Gl_Id"]</th>
+                <td>
+                    <div class="input-group">
+                        <select class="form-control selectpicker" asp-for="gl_id" name="gl_id" id="gl_id">
+                        </select>
+                        <input type="hidden" id="hidden_gl_id" value="@data.gl_id">
+                    </div>
+                    <span class="text-danger" asp-validation-for="gl_id"></span>
+                </td>
+            </tr>
+        </table>
+</div>
+<div class="card-footer text-center">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <button type="submit" class="btn btn-primary mr-2">@Localizer["Save"]</button>
+            <a href='@ViewData["returnUrl"]'><button type="button" class="btn btn-secondary">@Localizer["Back"]</button></a>
+        </div>
+    </div>
+</div>
+<!--end::Main Content-->
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/apps/form_vendor_group.js?v=1.0.0"></script>
+}

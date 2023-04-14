@@ -1,0 +1,334 @@
+@using Microsoft.AspNetCore.Mvc.Localization;
+@inject IViewLocalizer Localizer;
+@{
+    ViewData["Title"] = @Localizer["Title"];
+    var role = ViewBag.idRole;
+}
+
+@* begin::Main Content *@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-custom">
+            <div class="card-header card-header-tabs-line">
+                <div class="card-toolbar">
+                    <ul class="nav nav-tabs nav-bold nav-tabs-line">
+                        @if (role == "2")
+                        {
+                            @* Vendor *@
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#draft">
+                                    <span class="nav-icon"><i class="flaticon2-grids"></i></span>
+                                    <span class="nav-text">@Localizer["Draft"]</span>
+                                </a>
+                            </li>
+                            @* Vendor *@
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#process">
+                                    <span class="nav-icon"><i class="flaticon2-writing"></i></span>
+                                    <span class="nav-text">@Localizer["InProcess"]</span>
+                                </a>
+                            </li>
+                            @* Vendor *@
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#need_revision">
+                                    <span class="nav-icon"><i class="flaticon2-writing"></i></span>
+                                    <span class="nav-text">@Localizer["NeedRevision"]</span>
+                                </a>
+                            </li>
+                            @* Vendor *@
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#rejected">
+                                    <span class="nav-icon"><i class="flaticon2-grids"></i></span>
+                                    <span class="nav-text">@Localizer["Rejected"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (role == "1" || role == "3" || role == "4" || role == "5" || role == "6" || role == "7")
+                        {
+                            @* Admin, Procurement, Receiptionist, FC, Accounting, Finance *@
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#pending">
+                                    <span class="nav-icon"><i class="flaticon2-writing"></i></span>
+                                    <span class="nav-text">@Localizer["Pending"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (role == "6")
+                        {
+                            @* Accounting *@
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#error">
+                                    <span class="nav-icon"><i class="flaticon2-writing"></i></span>
+                                    <span class="nav-text">@Localizer["Error"]</span>
+                                </a>
+                            </li>
+                            @* Accounting *@
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#need_reversal">
+                                    <span class="nav-icon"><i class="flaticon2-writing"></i></span>
+                                    <span class="nav-text">@Localizer["NeedReversal"]</span>
+                                </a>
+                            </li>
+                            @* Accounting *@
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#simulation">
+                                    <span class="nav-icon"><i class="flaticon2-grids"></i></span>
+                                    <span class="nav-text">@Localizer["ForSimulation"]</span>
+                                </a>
+                            </li>
+                        }
+                        @* All of them *@
+                        <li class="nav-item">
+                            <a class='nav-link @(role == "8" ? "active" : null)' data-toggle="tab" href="#all">
+                                <span class="nav-icon"><i class="flaticon-list"></i></span>
+                                <span class="nav-text">@Localizer["All"]</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    @if (role == "2")
+                    {
+                        <div class="tab-pane fade show active" id="draft" role="tabpanel" aria-labelledby="draft">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_draft">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="process" role="tabpanel" aria-labelledby="process">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_process">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="need_revision" role="tabpanel" aria-labelledby="need_revision">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_need_revision">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="rejected" role="tabpanel" aria-labelledby="rejected">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_rejected">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                    @if (role == "1" || role == "3" || role == "4" || role == "5" || role == "6" || role == "7")
+                    {
+                        <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_pending">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                    @if (role == "6")
+                    {
+                        <div class="tab-pane fade" id="error" role="tabpanel" aria-labelledby="error">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_error">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title="Miro Number">Miro Number</th>
+                                            <th title="Posting Date">Posting Date</th>
+                                            <th title="Remmitance Number">Remmitance Number</th>
+                                            <th title="Remmitance Date">Remmitance Date</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Status"]'>RPA @Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="need_reversal" role="tabpanel" aria-labelledby="need_reversal">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_need_reversal">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title="Miro Number">Miro Number</th>
+                                            <th title="Posting Date">Posting Date</th>
+                                            <th title="Remmitance Date Number">Remmitance Number</th>
+                                            <th title="Remmitance Date Date">Remmitance Date</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="simulation" role="tabpanel" aria-labelledby="simulation">
+                            <div class="table-responsive">
+                                <!--begin: Datatable-->
+                                <table class="table table-bordered table-hover" id="kt_datatable_simulation">
+                                    <thead>
+                                        <tr>
+                                            <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                            <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                            <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                            <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                            <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                            <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                            <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                            <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                            <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                    <div class='tab-pane fade @(role == "8" ? "show active" : null)' id="all" role="tabpanel" aria-labelledby="all">
+                        <div class="table-responsive">
+                            <!--begin: Datatable-->
+                            <table class="table table-bordered table-hover" id="kt_datatable_all">
+                                <thead>
+                                    <tr>
+                                        <th title='@Localizer["TicketNumber"]'>@Localizer["TicketNumber"]</th>
+                                        <th title='@Localizer["StartDate"]'>@Localizer["StartDate"]</th>
+                                        <th title='@Localizer["ReceivedDate"]'>@Localizer["ReceivedDate"]</th>
+                                        <th title='@Localizer["VendorNumber"]'>@Localizer["VendorNumber"]</th>
+                                        <th title='@Localizer["Name"]'>@Localizer["Name"]</th>
+                                        <th title='@Localizer["InvoiceNumber"]'>@Localizer["InvoiceNumber"]</th>
+                                        <th title='@Localizer["Amount"]'>@Localizer["Amount"]</th>
+                                        @if (role == "6")
+                                        {
+                                            <th title="Miro Number">Miro Number</th>
+                                            <!-- for ticket Accounting-->
+                                            <th title="Posting Date">Posting Date</th>
+                                            <!-- for ticket Accounting-->
+                                        }
+                                        <th title="Remmitance Number">Remittance Number</th>
+                                        <!-- for admin-proc-fc-receipt-finance -->
+                                        <th title="Remmitance Date">Remittance Date</th>
+                                        <!-- for admin-proc-fc-receipt-finance -->
+                                        <th title='@Localizer["Status"]'>@Localizer["Status"]</th>
+                                        <th title='@Localizer["Actions"]'>@Localizer["Actions"]</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* begin::Main Content *@
+@section Scripts{
+    <script>
+        var role_id = "@role"
+    </script>
+    <script type="text/javascript" src="~/plugins/custom/datatables/datatables.bundle.js?v=7.2.8"></script>
+
+    @if (role == "6")
+    {
+        <script src="~/js/apps/ticket_default.js?v=1.0.0"></script>
+        <script src="~/js/apps/ticket_accounting.js?v=1.0.4"></script>
+    }
+    else if (role == "2")
+    {
+        <script src="~/js/apps/ticket_vendor.js?v=1.0.1"></script>
+    }
+    else
+    {
+        <script src="~/js/apps/ticket_default.js?v=1.0.2"></script>
+    }
+}
